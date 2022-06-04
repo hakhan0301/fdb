@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { GiHeartPlus } from "react-icons/gi";
+import { useRouter } from 'next/router';
 
 function TextField({
   textValidation = () => true,
   onChange = () => { }
 } = {}) {
-  const [text, setText] = useState("");
+  const [text, setText] = useState('');
   const [isError, setIsError] = useState(false);
 
   const onText = (newText) => {
@@ -28,19 +29,31 @@ function TextField({
   )
 }
 
-function Button({ children }) {
+function Button({ children, onClick, disabled }) {
   return (
-    <button className="py-2 px-4 rounded-full bg-pink-500 border-2 border-red-600 text-white">
+    <button onClick={onClick} disabled={disabled}
+      className={`py-2 px-4 rounded-full 
+        ${disabled ? 'bg-slate-500 border-white' : 'bg-pink-500 border-red-600'} 
+        border-2 text-white `} >
       {children}
-    </button>
+    </button >
   );
 }
 
 
 export default function ContentList() {
-  const [text, setText] = useState('');
+  const [text, setText] = useState('SUSSSY BAKA');
+  const [disabledSubmit, setDisabledSubmit] = useState(false)
+  const router = useRouter();
 
-
+  const submitBlogPost = async () => {
+    setDisabledSubmit(true);
+    await fetch('/api/blogs', {
+      method: 'POST',
+      body: text
+    });
+    router.push('/');
+  };
 
   return (
     <div className="mx-auto max-w-xl">
@@ -53,7 +66,9 @@ export default function ContentList() {
           />
         </div>
         <div className="flex justify-end">
-          <Button><GiHeartPlus /></Button>
+          <Button onClick={submitBlogPost} disabled={disabledSubmit}>
+            <GiHeartPlus />
+          </Button>
         </div>
       </div>
     </div>

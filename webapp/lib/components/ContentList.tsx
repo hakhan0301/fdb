@@ -1,5 +1,6 @@
 const lorum = `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.`;
-function ContentItem() {
+function ContentItem({ text }: { text: string }) {
+
   return (
     <div className="flex flex-col py-4 gap-4 bg-amber-100 md:border-x border-y border-yellow-600 border-opacity-20">
       <div className="flex flex-row px-4 items-center gap-4">
@@ -17,19 +18,20 @@ function ContentItem() {
           <h1 className="text-center text-xl">3</h1>
           <h1 className="text-center text-xl cursor-pointer hover:text-red-500 rotate-180">^</h1>
         </div>
-        <p>{lorum}</p>
+        <p>{text}</p>
 
       </div>
     </div>
   )
 }
-export default function ContentList() {
+
+
+
+export default function ContentList({ blogPosts }) {
   return (
     <div className="mx-auto max-w-xl">
       <div className="flex flex-col">
-        <ContentItem />
-        <ContentItem />
-        <ContentItem />
+        {blogPosts.map(blogPost => <ContentItem {...blogPost} />)}
       </div>
     </div>
   )
