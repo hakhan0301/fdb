@@ -3,9 +3,6 @@ import { GiHeartPlus } from "react-icons/gi";
 import { useRouter } from 'next/router';
 import { TextArea, Button } from '@fdb/ui/Common';
 
-
-
-
 export default function ContentList() {
   const [text, setText] = useState('SUSSSY BAKA');
   const [disabledSubmit, setDisabledSubmit] = useState(false)
