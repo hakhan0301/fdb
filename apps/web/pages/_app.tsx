@@ -1,4 +1,4 @@
-import NavBar from '../lib/components/NavBar';
+import NavBar from '@fdb/ui/NavBar';
 import '../styles/globals.css';
 import Head from 'next/head';
 

@@ -1,4 +1,4 @@
-import { TextField, Button } from "../lib/components/Common";
+import { TextField, Button } from "@fdb/ui/Common";
 
 export default function LoginPage() {
   return (
