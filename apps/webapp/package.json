@@ -1,5 +1,5 @@
 {
-  "name": "webapp",
+  "name": "@fdb/webapp",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -16,6 +16,8 @@
     "react-icons": "^4.3.1"
   },
   "devDependencies": {
+    "@fdb/tsconfig": "*",
+    "@fdb/eslint": "^0.0.0",
     "@types/node": "^17.0.39",
     "@types/react": "^18.0.11",
     "autoprefixer": "^10.4.7",
