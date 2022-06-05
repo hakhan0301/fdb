@@ -3,9 +3,9 @@ import type { Prisma } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-const dateStripped = obj => {
-  let newObj = {}
-  Object.keys(obj).forEach(key => {
+const dateStripped = (obj: any) => {
+  let newObj: any = {}
+  Object.keys(obj).forEach((key: string) => {
     let value = obj[key]
     if (value !== null) {
       if (Array.isArray(value)) {

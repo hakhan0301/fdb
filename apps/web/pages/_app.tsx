@@ -1,20 +1,26 @@
 import NavBar from '@fdb/ui/NavBar';
 import '../styles/globals.css';
 import Head from 'next/head';
+import { SessionProvider } from "next-auth/react";
 import type { AppProps } from 'next/app';
 
-function MyApp({ Component, pageProps }: AppProps) {
+function MyApp({
+  Component,
+  pageProps: { session, ...pageProps },
+}: AppProps) {
   return (
-    <>
+    <SessionProvider session={session}>
       <Head>
         <title>Foolar Daily Blog - FDB</title>
         <meta name="description" content="FOOLARS ASSEMBLE" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <NavBar />
-      <Component {...pageProps} />
-    </>
+      <main className="h-screen flex flex-col">
+        <NavBar />
+        <Component {...pageProps} />
+      </main>
+    </SessionProvider>
   );
 }
 

@@ -15,7 +15,10 @@ export default function NavBar() {
       <div className="py-4 px-4 bg-purple-900 text-3xl text-pink-50">
         <div className="flex flex-row justify-between items-center">
           <Link href="/"><div className="cursor-pointer select-none">susy bakas</div></Link>
-          <div className="cursor-pointer select-none" onClick={toggleMenu}><GiHamburgerMenu /></div>
+          <div className="flex flex-row gap-3 items-center">
+            <Link href="/test"><div className="text-sm cursor-pointer">dev</div></Link>
+            <div className="cursor-pointer select-none" onClick={toggleMenu}><GiHamburgerMenu /></div>
+          </div>
         </div>
       </div>
       {/* menu */}
