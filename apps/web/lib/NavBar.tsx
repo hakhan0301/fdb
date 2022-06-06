@@ -23,9 +23,10 @@ export default function NavBar() {
           <div className="flex flex-row gap-3 items-center">
             <Link href="/test"><div className="text-sm cursor-pointer">dev</div></Link>
 
-            {user ?
-              <div className="cursor-pointer select-none" onClick={toggleMenu}><GiHamburgerMenu /></div>
-              : <Link href="login"><Button><div className="text-lg">Login</div></Button></Link>}
+            {user
+              ? <div className="cursor-pointer select-none" onClick={toggleMenu}><GiHamburgerMenu /></div>
+              : <Link href="login"><Button><div className="text-lg">Login</div></Button></Link>
+            }
           </div>
         </div>
       </div>
