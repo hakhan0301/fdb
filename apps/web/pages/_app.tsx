@@ -1,4 +1,4 @@
-import NavBar from '@fdb/ui/NavBar';
+import NavBar from '../lib/NavBar';
 import '../styles/globals.css';
 import Head from 'next/head';
 import { SessionProvider } from "next-auth/react";
@@ -16,7 +16,7 @@ function MyApp({
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="h-screen w-screen flex flex-col">
+      <main className="h-screen flex flex-col">
         <NavBar />
         <div className='flex-grow'>
           <Component {...pageProps} />
