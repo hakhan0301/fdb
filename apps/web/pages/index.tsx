@@ -1,4 +1,4 @@
-import { getBlogs } from '../lib/models/blogs';
+import { getBlogs } from '@fdb/db/models/blogs';
 
 import type { GetServerSideProps } from 'next';
 import Image from 'next/image';

@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '../index';
 import type { Prisma } from '@prisma/client';
-
-const prisma = new PrismaClient();
 
 export async function getBlogs() {
   const blogPost = await prisma.blogPost.findMany({

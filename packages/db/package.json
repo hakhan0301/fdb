@@ -1,0 +1,19 @@
+{
+  "name": "@fdb/db",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.ts",
+  "scripts": {
+    "lint": "eslint *.ts*"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@fdb/eslint": "^0.0.0",
+    "@fdb/tsconfig": "^0.0.0",
+    "prisma": "^3.14.0"
+  },
+  "dependencies": {
+    "@prisma/client": "^3.14.0"
+  }
+}

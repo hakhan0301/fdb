@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { addBlog } from '../../../lib/models/blogs';
+import { addBlog } from '@fdb/db/models/blogs';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
