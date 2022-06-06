@@ -11,17 +11,17 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 
-export default function Home({ blogPosts }) {
+export default function Home({ blogPosts }: any) {
   return (
     <div className="mx-auto max-w-xl">
       <div className="flex flex-col">
-        {blogPosts.map(blogPost => <ContentItem {...blogPost} />)}
+        {blogPosts.map((blogPost: any) => <ContentItem key={JSON.stringify(blogPost)} {...blogPost} />)}
       </div>
     </div>
   )
 }
 
-function ContentItem({ text }: { text: string }) {
+function ContentItem({ text, createdAt }: { text: string, createdAt: string }) {
 
   return (
     <div className="flex flex-col py-4 gap-4 bg-amber-100 md:border-x border-y border-yellow-600 border-opacity-20">
@@ -30,7 +30,7 @@ function ContentItem({ text }: { text: string }) {
 
         <div className="flex flex-col">
           <h1 className="text-lg font-bold">The Guy's Name</h1>
-          <h1 className="text-sm text-gray-600">1/2/2022</h1>
+          <h1 className="text-sm text-gray-600">{new Date(createdAt).toLocaleDateString()}</h1>
         </div>
       </div>
 

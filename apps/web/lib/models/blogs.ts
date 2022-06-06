@@ -3,25 +3,6 @@ import type { Prisma } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-const dateStripped = (obj: any) => {
-  let newObj: any = {}
-  Object.keys(obj).forEach((key: string) => {
-    let value = obj[key]
-    if (value !== null) {
-      if (Array.isArray(value)) {
-        value = value.map(item => dateStripped(item))
-      } else if (typeof value === 'object' && typeof value.getMonth === 'function') {
-        value = JSON.parse(JSON.stringify(value))
-      }
-      else if (typeof value === 'object') {
-        value = dateStripped(value)
-      }
-    }
-    newObj[key] = value
-  })
-  return newObj
-}
-
 export async function getBlogs() {
   const blogPost = await prisma.blogPost.findMany({
     take: 10,
@@ -30,7 +11,10 @@ export async function getBlogs() {
     }
   });
 
-  return blogPost.map(dateStripped);
+  return blogPost.map((blogPost) => ({
+    ...blogPost,
+    createdAt: blogPost.createdAt.toString()
+  }));
 }
 
 export async function addBlog(blogPost: Prisma.BlogPostCreateInput) {
