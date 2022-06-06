@@ -7,7 +7,7 @@ export function TextArea({
   const [text, setText] = useState('');
   const [isError, setIsError] = useState(false);
 
-  const onText = (newText) => {
+  const onText = (newText: string) => {
     const isValid = textValidation(newText);
     setIsError(!isValid);
     setText(newText);
@@ -36,7 +36,7 @@ export function TextField({
   const [text, setText] = useState('');
   const [isError, setIsError] = useState(false);
 
-  const onText = (newText) => {
+  const onText = (newText: string) => {
     const isValid = textValidation(newText);
     setIsError(!isValid);
     setText(newText);
@@ -59,7 +59,7 @@ export function TextField({
 
 
 
-export function Button({ children, onClick = () => { }, disabled = false }) {
+export function Button({ children, onClick = () => { }, disabled = false }: any) {
   return (
     <button onClick={onClick} disabled={disabled}
       className={`py-2 px-4 rounded-full 
