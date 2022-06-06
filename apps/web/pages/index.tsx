@@ -1,6 +1,7 @@
 import { getBlogs } from '../lib/models/blogs';
 
 import type { GetServerSideProps } from 'next';
+import Image from 'next/image';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   return {
@@ -26,7 +27,11 @@ function ContentItem({ text, createdAt }: { text: string, createdAt: string }) {
   return (
     <div className="flex flex-col py-4 gap-4 bg-amber-100 md:border-x border-y border-yellow-600 border-opacity-20">
       <div className="flex flex-row px-4 items-center gap-4">
-        <img className="w-12 h-12 rounded-2xl shadow-md" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg" />
+        <img
+          alt={"user logo"}
+          className="w-12 h-12 rounded-2xl shadow-md"
+          src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1200px-Cat03.jpg"
+        />
 
         <div className="flex flex-col">
           <h1 className="text-lg font-bold">The Guy's Name</h1>
