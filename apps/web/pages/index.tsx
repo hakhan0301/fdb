@@ -40,7 +40,7 @@ function ContentItem({ text }: { text: string }) {
           <h1 className="text-center text-xl">3</h1>
           <h1 className="text-center text-xl cursor-pointer hover:text-red-500 rotate-180">^</h1>
         </div>
-        <p>{text}</p>
+        <p className='whitespace-pre-line'>{text}</p>
 
       </div>
     </div>

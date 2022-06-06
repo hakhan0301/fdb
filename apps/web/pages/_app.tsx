@@ -16,9 +16,11 @@ function MyApp({
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <main className="h-screen flex flex-col">
+      <main className="h-screen w-screen flex flex-col">
         <NavBar />
-        <Component {...pageProps} />
+        <div className='flex-grow'>
+          <Component {...pageProps} />
+        </div>
       </main>
     </SessionProvider>
   );

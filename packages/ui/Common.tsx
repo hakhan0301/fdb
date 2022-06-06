@@ -19,7 +19,7 @@ export function TextArea({
   return (
     <div className="">
       <textarea
-        className={`rounded-md bg-white-50 resize-y p-1 w-[100%] ${border}`}
+        className={`rounded-md bg-white-50 resize-y p-1 w-[100%] ${border} text-black`}
         value={text}
         onChange={(event) => onText(event.target.value)}
       />
