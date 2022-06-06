@@ -10,7 +10,6 @@ export default function NavBar() {
   const [menuHidden, setMenuHidden] = useState(true);
 
   const toggleMenu = () => setMenuHidden(!menuHidden);
-
   const user = useUser();
 
   return (
@@ -25,7 +24,7 @@ export default function NavBar() {
 
             {user
               ? <div className="cursor-pointer select-none" onClick={toggleMenu}><GiHamburgerMenu /></div>
-              : <Link href="login"><Button><div className="text-lg">Login</div></Button></Link>
+              : <></>
             }
           </div>
         </div>
