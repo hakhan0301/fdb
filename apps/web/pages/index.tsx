@@ -34,14 +34,21 @@ function ContentItem(props: any) {
   const [likedByUser, setLikedByUser] = useState(initialLikedByUser);
 
   const likePost = debounce(async () => {
-    // console.log('sussy baka');
-
     try {
       await fetch(`/api/blogs/like/${id}`, {
         method: 'POST'
       });
       setTotalLikes(totalLikes + 1);
       setLikedByUser(true);
+    } catch { }
+  });
+  const dislikePost = debounce(async () => {
+    try {
+      await fetch(`/api/blogs/dislike/${id}`, {
+        method: 'POST'
+      });
+      setTotalLikes(totalLikes - 1);
+      setLikedByUser(false);
     } catch { }
   });
 
@@ -71,8 +78,11 @@ function ContentItem(props: any) {
 
       <div className="flex flex-row gap-4 px-4">
         <div className="w-12 justify-self-center shrink-0">
-          <h1 onClick={likedByUser ? () => { } : likePost}
-            className={`text-center text-xl cursor-pointer hover:text-green-400 select-none ${likedByUser && 'text-green-400'}`}
+          <h1 onClick={likedByUser ? dislikePost : likePost}
+            className={`text-center text-xl cursor-pointer select-none 
+                      ${likedByUser && 'text-green-400'}
+                      ${likedByUser ? 'hover:text-red-500' : 'hover:text-green-400 '}          
+            `}
           >^</h1>
           <h1 className="text-center text-xl select-none">{totalLikes}</h1>
           {/* <h1 className="text-center text-xl cursor-pointer hover:text-red-500 rotate-180">^</h1> */}
