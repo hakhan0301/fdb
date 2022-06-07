@@ -1,5 +1,10 @@
-import { getBlogs } from "../models/blogs";
+import { dislikeBlog, getBlogs } from "../models/blogs";
 
-getBlogs('lazohbeem02@gmail.com').then(
-  data => console.dir(data, { depth: 100 })
-);
+async function main() {
+  await dislikeBlog(1, 'lazohbeem02@gmail.com');
+
+  const data = await getBlogs('lazohbeem02@gmail.com');
+  console.dir(data, { depth: 100 });
+}
+
+main().catch(console.error);
