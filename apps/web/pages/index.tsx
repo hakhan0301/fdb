@@ -41,7 +41,7 @@ function ContentItem(props: any) {
       setTotalLikes(totalLikes + 1);
       setLikedByUser(true);
     } catch { }
-  });
+  }, 300);
   const dislikePost = debounce(async () => {
     try {
       await fetch(`/api/blogs/dislike/${id}`, {
@@ -50,7 +50,7 @@ function ContentItem(props: any) {
       setTotalLikes(totalLikes - 1);
       setLikedByUser(false);
     } catch { }
-  });
+  }, 300);
 
   return (
     <div className="flex flex-col py-4 gap-4 bg-amber-100 md:border-x border-y border-yellow-600 border-opacity-20">
@@ -79,12 +79,12 @@ function ContentItem(props: any) {
       <div className="flex flex-row gap-4 px-4">
         <div className="w-12 justify-self-center shrink-0">
           <h1 onClick={likedByUser ? dislikePost : likePost}
-            className={`text-center text-xl cursor-pointer select-none 
-                      ${likedByUser && 'text-green-400'}
+            className={`text-center text-xl cursor-pointer select-none
+                      ${likedByUser ? 'text-green-400' : 'text-black'}
                       ${likedByUser ? 'hover:text-red-500' : 'hover:text-green-400 '}          
             `}
           >^</h1>
-          <h1 className="text-center text-xl select-none">{totalLikes}</h1>
+          <h1 className="text-center text-xl">{totalLikes}</h1>
           {/* <h1 className="text-center text-xl cursor-pointer hover:text-red-500 rotate-180">^</h1> */}
         </div>
         <p className='whitespace-pre-line'>{text}</p>
