@@ -14,10 +14,6 @@ export default NextAuth({
   ],
   pages: {
     signIn: '/login',
-    error: '/login'
-  },
-  session: {
-    strategy: "database"
+    error: '/'
   }
 });
-

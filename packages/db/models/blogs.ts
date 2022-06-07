@@ -1,6 +1,4 @@
 import { prisma } from '../index';
-import type { Prisma } from '@prisma/client';
-import type { DefaultSession } from 'next-auth';
 
 export async function getBlogs() {
   const blogPost = await prisma.blogPost.findMany({
@@ -9,23 +7,34 @@ export async function getBlogs() {
       createdAt: 'desc'
     },
     include: {
-      user: { select: { name: true, image: true } }
+      author: { select: { name: true, image: true } },
+      _count: {
+        select: { likes: true }
+      }
     }
   });
 
   return blogPost.map((blogPost) => ({
     ...blogPost,
-    createdAt: blogPost.createdAt.toString()
+    likes: blogPost._count.likes,
+    createdAt: blogPost.createdAt.toString(),
   }));
 }
 
 export async function addBlog(text: string, email: string) {
-  await prisma.blogPost.create({
+  return prisma.blogPost.create({
     data: {
       text,
-      user: {
-        connect: { email: email }
-      }
+      author: { connect: { email: email } }
+    }
+  });
+}
+
+export async function likeBlog(blogId: number, email: string) {
+  return prisma.blogPost.update({
+    where: { id: blogId },
+    data: {
+      likes: { connect: { email: email } }
     }
   });
 }

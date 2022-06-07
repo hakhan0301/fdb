@@ -11,6 +11,8 @@
   "devDependencies": {
     "@fdb/eslint": "^0.0.0",
     "@fdb/tsconfig": "^0.0.0",
+    "@swc-node/register": "^1.5.1",
+    "@types/debounce": "^1.2.1",
     "prisma": "^3.14.0"
   },
   "dependencies": {
