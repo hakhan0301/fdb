@@ -7,9 +7,6 @@ import type { Session } from 'next-auth';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
 
-  console.log('YAHOOOOOOOOOOOOOOOO');
-
-
   switch (method) {
     case 'POST':
       const session = await getSession({ req })
