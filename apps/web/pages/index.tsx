@@ -4,11 +4,12 @@ import { useState } from 'react';
 import { debounce } from 'debounce';
 
 import type { GetServerSideProps } from 'next';
-
+import { getSession } from 'next-auth/react';
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
   return {
     props: {
-      blogPosts: await getBlogs()
+      blogPosts: await getBlogs(session?.user?.email)
     }
   }
 }
@@ -25,17 +26,23 @@ export default function Home({ blogPosts }: any) {
 }
 
 function ContentItem(props: any) {
-  const [debug, setDebug] = useState(false);
-
-  const { text, createdAt, author, likes, id } = props;
+  const { text, createdAt, author, totalLikes: initialLikes, id, likedByUser: initialLikedByUser } = props;
   const { name, image } = author;
+
+  const [debug, setDebug] = useState(false);
+  const [totalLikes, setTotalLikes] = useState(initialLikes);
+  const [likedByUser, setLikedByUser] = useState(initialLikedByUser);
 
   const likePost = debounce(async () => {
     // console.log('sussy baka');
 
-    fetch(`/api/blogs/like/${id}`, {
-      method: 'POST'
-    });
+    try {
+      await fetch(`/api/blogs/like/${id}`, {
+        method: 'POST'
+      });
+      setTotalLikes(totalLikes + 1);
+      setLikedByUser(true);
+    } catch { }
   });
 
   return (
@@ -64,11 +71,10 @@ function ContentItem(props: any) {
 
       <div className="flex flex-row gap-4 px-4">
         <div className="w-12 justify-self-center shrink-0">
-          <h1
-            onClick={likePost}
-            className="text-center text-xl cursor-pointer hover:text-green-400 select-none"
+          <h1 onClick={likedByUser ? () => { } : likePost}
+            className={`text-center text-xl cursor-pointer hover:text-green-400 select-none ${likedByUser && 'text-green-400'}`}
           >^</h1>
-          <h1 className="text-center text-xl select-none">{likes}</h1>
+          <h1 className="text-center text-xl select-none">{totalLikes}</h1>
           {/* <h1 className="text-center text-xl cursor-pointer hover:text-red-500 rotate-180">^</h1> */}
         </div>
         <p className='whitespace-pre-line'>{text}</p>

@@ -1,7 +1,7 @@
 import { prisma } from '../index';
 import type { Prisma } from '@prisma/client';
 
-export async function getBlogs(email: string = '') {
+export async function getBlogs(email: string | undefined | null = '') {
   const blogPost = await prisma.blogPost.findMany({
     take: 10,
     orderBy: {
@@ -11,7 +11,7 @@ export async function getBlogs(email: string = '') {
       author: { select: { name: true, image: true } },
       likes: {
         select: { email: true },
-        where: { email: email }
+        where: { email: email || '' }
       },
       _count: { select: { likes: true } }
     }
@@ -48,5 +48,19 @@ export async function likeBlog(blogId: number, email: string) {
     data: {
       likes: { connect: { email: email } }
     }
+  });
+}
+
+
+export async function dislikeBlog(blogId: number, email: string) {
+  return prisma.blogPost.update({
+    data: {
+      likes: {
+        disconnect: {
+          email
+        }
+      }
+    },
+    where: { id: blogId },
   });
 }
