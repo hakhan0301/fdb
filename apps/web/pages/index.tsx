@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { debounce } from 'debounce';
 
 import type { GetServerSideProps } from 'next';
-import { getSession } from 'next-auth/react';
+import { getSession, useSession } from 'next-auth/react';
 import { Button, TextArea, TextField } from '@fdb/ui';
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -17,10 +17,16 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 
 export default function Home({ blogPosts }: any) {
+  const session = useSession();
+
   return (
     <div className="mx-auto max-w-xl">
       <div className="flex flex-col">
-        {blogPosts.map((blogPost: any) => <ContentItem key={JSON.stringify(blogPost)} {...blogPost} />)}
+        {blogPosts.map((blogPost: any) => <ContentItem
+          key={JSON.stringify(blogPost)}
+          {...blogPost}
+          sessionUser={session?.data?.user}
+        />)}
       </div>
     </div>
   )
@@ -93,6 +99,7 @@ function ContentItem(props: any) {
     text,
     author,
     createdAt,
+    sessionUser,
     comments: initialComments,
     totalLikes: initialLikes,
     likedByUser: initialLikedByUser
@@ -131,7 +138,11 @@ function ContentItem(props: any) {
       method: 'POST',
       body: comment
     });
-    setComments([...comments, { text: comment, createdAt: new Date().toISOString(), author: { name } }]);
+    setComments([...comments, {
+      text: comment,
+      createdAt: new Date().toISOString(),
+      author: { name: sessionUser.name }
+    }]);
   }, 300);
 
   return (
