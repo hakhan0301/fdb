@@ -14,7 +14,7 @@ export async function getBlogs(email: string | undefined | null = '') {
           text: true,
           author: { select: { name: true } }
         },
-        orderBy: { createdAt: 'desc' }
+        orderBy: { createdAt: 'asc' }
       },
       likes: {
         select: { email: true },
@@ -29,6 +29,10 @@ export async function getBlogs(email: string | undefined | null = '') {
       totalLikes: blogPost._count.likes,
       likedByUser: blogPost.likes.length > 0,
       createdAt: blogPost.createdAt.toString(),
+      comments: blogPost.comments.map((comment) => ({
+        ...comment,
+        createdAt: comment.createdAt.toString(),
+      })),
     };
 
     const out = {
@@ -73,6 +77,7 @@ export async function dislikeBlog(blogId: number, email: string) {
 
 
 export async function addComment(comment: string, blogId: number, email: string) {
+
   return prisma.blogPost.update({
     data: {
       comments: {

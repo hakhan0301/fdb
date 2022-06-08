@@ -19,9 +19,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 }
 
 async function POST_blog_comment(req: NextApiRequest, res: NextApiResponse, session: Session) {
-  const comment = req.body.comment;
+  const comment = req.body;
   const blogId = parseInt(req.query.blogId as string, 10);
   const email = session.user?.email as string;
+
+  console.log(comment, blogId, email);
+
 
   try {
     await addComment(comment, blogId, email);

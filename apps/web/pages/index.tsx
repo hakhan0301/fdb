@@ -5,6 +5,7 @@ import { debounce } from 'debounce';
 
 import type { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
+import { Button, TextArea, TextField } from '@fdb/ui';
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
   return {
@@ -25,13 +26,59 @@ export default function Home({ blogPosts }: any) {
   )
 }
 
+function CommentField({ onSubmit }: any) {
+  const [comment, setComment] = useState('');
+
+  const handleSubmit = () => {
+    onSubmit(comment);
+    setComment('');
+  };
+
+  return (
+    <div className='flex flex-row items-center gap-2 justify-start px-6'>
+      <TextField onChange={setComment}
+        textValidation={str => str.length > 3 && str.length < 20} />
+      <Button onClick={handleSubmit}>Submit</Button>
+    </div>
+  );
+}
+
+interface Comment {
+  text: string;
+  createdAt: string;
+  author: {
+    name: string;
+  }
+}
+
+function Comment({
+  text, createdAt, author, index
+}: Comment & { index: number }) {
+  const bgColor = index % 2 === 0 ? 'bg-amber-50' : 'bg-amber-100';
+  return (
+    <div className={`flex flex-row items-center gap-2 justify-start px-6 py-1 ${bgColor}`}>
+      <div className='text-sm'>{author.name}<span className='select-none'>:</span></div>
+      <div>{text}</div>
+    </div>
+  );
+}
+
 function ContentItem(props: any) {
-  const { text, createdAt, author, totalLikes: initialLikes, id, likedByUser: initialLikedByUser } = props;
+  const {
+    id,
+    text,
+    author,
+    createdAt,
+    comments: initialComments,
+    totalLikes: initialLikes,
+    likedByUser: initialLikedByUser
+  } = props;
   const { name, image } = author;
 
   const [debug, setDebug] = useState(false);
   const [totalLikes, setTotalLikes] = useState(initialLikes);
   const [likedByUser, setLikedByUser] = useState(initialLikedByUser);
+  const [comments, setComments] = useState(initialComments);
 
   const likePost = debounce(async () => {
     try {
@@ -42,6 +89,7 @@ function ContentItem(props: any) {
       setLikedByUser(true);
     } catch { }
   }, 300);
+
   const dislikePost = debounce(async () => {
     try {
       await fetch(`/api/blogs/dislike/${id}`, {
@@ -50,6 +98,16 @@ function ContentItem(props: any) {
       setTotalLikes(totalLikes - 1);
       setLikedByUser(false);
     } catch { }
+  }, 300);
+
+  const addComment = debounce(async (comment: string) => {
+    if (comment == '') return;
+
+    await fetch(`/api/blogs/${id}/comment`, {
+      method: 'POST',
+      body: comment
+    });
+    setComments([...comments, { text: comment, createdAt: new Date().toISOString(), author: { name } }]);
   }, 300);
 
   return (
@@ -90,6 +148,17 @@ function ContentItem(props: any) {
         <p className='whitespace-pre-line'>{text}</p>
 
       </div>
+
+      <div className='flex flex-col'>
+        {comments.map((comment: any, i: number) => (
+          <Comment {...comment}
+            key={JSON.stringify(comment)}
+            index={i}
+          />
+        ))}
+      </div>
+
+      <CommentField onSubmit={addComment} />
     </div >
   )
 }

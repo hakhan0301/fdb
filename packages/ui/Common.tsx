@@ -28,11 +28,17 @@ export function TextArea({
 }
 
 
+interface FieldInputProps {
+  textValidation?: (str: string) => boolean;
+  onChange?: (str: string) => void;
+  type?: string;
+}
+
 export function TextField({
   textValidation = (str: string) => true,
   onChange = (str: string) => { },
   type = 'text'
-} = {}) {
+}: FieldInputProps) {
   const [text, setText] = useState('');
   const [isError, setIsError] = useState(false);
 

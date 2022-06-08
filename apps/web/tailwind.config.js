@@ -12,4 +12,10 @@ module.exports = {
       strategy: 'class', // only generate classes
     }),
   ],
+  variants: {
+    extend: {
+      backgroundColor: ['odd', 'even'],
+
+    }
+  }
 }
