@@ -1,5 +1,4 @@
 import { prisma } from '../index';
-import type { Prisma } from '@prisma/client';
 
 export async function getBlogs(email: string | undefined | null = '') {
   const blogPost = await prisma.blogPost.findMany({
@@ -9,9 +8,17 @@ export async function getBlogs(email: string | undefined | null = '') {
     },
     include: {
       author: { select: { name: true, image: true } },
+      comments: {
+        select: {
+          createdAt: true,
+          text: true,
+          author: { select: { name: true } }
+        },
+        orderBy: { createdAt: 'desc' }
+      },
       likes: {
         select: { email: true },
-        where: { email: email || '' }
+        where: { email: email || '' } // is the post liked by the logged in user
       },
       _count: { select: { likes: true } }
     }
@@ -51,13 +58,27 @@ export async function likeBlog(blogId: number, email: string) {
   });
 }
 
-
 export async function dislikeBlog(blogId: number, email: string) {
   return prisma.blogPost.update({
     data: {
       likes: {
         disconnect: {
           email
+        }
+      }
+    },
+    where: { id: blogId },
+  });
+}
+
+
+export async function addComment(comment: string, blogId: number, email: string) {
+  return prisma.blogPost.update({
+    data: {
+      comments: {
+        create: {
+          text: comment,
+          author: { connect: { email: email } },
         }
       }
     },
