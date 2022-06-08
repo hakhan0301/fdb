@@ -49,7 +49,7 @@ export function TextField({
     if (isValid) onChange(newText);
   }
 
-  const border = isError ? 'border-2 border-red-500' : 'border';
+  const border = isError ? 'border border-red-500' : 'border';
 
   return (
     <div className="">
@@ -73,7 +73,10 @@ export function Button({ children, onClick = () => { }, disabled = false }: any)
         border-2 text-white 
         hover:animate-bounce 
       `} >
-      {children}
+      <div className="select-none">
+        {children}
+
+      </div>
     </button >
   );
 }

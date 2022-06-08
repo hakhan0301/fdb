@@ -30,8 +30,8 @@ function CommentField({ onSubmit }: any) {
   const [comment, setComment] = useState('');
 
   const handleSubmit = () => {
-    onSubmit(comment);
     setComment('');
+    onSubmit(comment);
   };
 
   return (
@@ -59,6 +59,30 @@ function Comment({
     <div className={`flex flex-row items-center gap-2 justify-start px-6 py-1 ${bgColor}`}>
       <div className='text-sm'>{author.name}<span className='select-none'>:</span></div>
       <div>{text}</div>
+    </div>
+  );
+}
+
+function Comments({ comments }: { comments: Comment[] }) {
+  const [displayAll, setDisplayAll] = useState(false);
+  const displayedComments = displayAll ? comments : comments.slice(-3);
+  const shortened = displayedComments.length < comments.length;
+  return (
+    <div className='flex flex-col'>
+      {shortened &&
+        <div className='text-sm px-6 font-mono select-none'>
+          <span
+            className='cursor-pointer py-2 hover:text-gray-500'
+            onClick={() => setDisplayAll(true)}
+          >...</span>
+        </div>
+      }
+      {displayedComments.map((comment: Comment, i: number) => (
+        <Comment {...comment}
+          key={JSON.stringify(comment)}
+          index={i}
+        />
+      ))}
     </div>
   );
 }
@@ -149,14 +173,7 @@ function ContentItem(props: any) {
 
       </div>
 
-      <div className='flex flex-col'>
-        {comments.map((comment: any, i: number) => (
-          <Comment {...comment}
-            key={JSON.stringify(comment)}
-            index={i}
-          />
-        ))}
-      </div>
+      <Comments comments={comments} />
 
       <CommentField onSubmit={addComment} />
     </div >
