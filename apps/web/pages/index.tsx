@@ -41,10 +41,10 @@ function CommentField({ onSubmit }: any) {
   };
 
   return (
-    <div className='flex flex-row items-center gap-2 justify-start px-6'>
+    <div className='flex flex-row items-center gap-2 justify-start'>
       <TextField onChange={setComment}
         textValidation={str => str.length > 3 && str.length < 20} />
-      <Button onClick={handleSubmit}>Submit</Button>
+      <Button onClick={handleSubmit}>c</Button>
     </div>
   );
 }
@@ -62,7 +62,7 @@ function Comment({
 }: Comment & { index: number }) {
   const bgColor = index % 2 === 0 ? 'bg-amber-50' : 'bg-amber-100';
   return (
-    <div className={`flex flex-row items-center gap-2 justify-start px-6 py-1 ${bgColor}`}>
+    <div className={`flex flex-row items-center gap-2 justify-start py-1 px-2 ${bgColor}`}>
       <div className='text-sm'>{author.name}<span className='select-none'>:</span></div>
       <div>{text}</div>
     </div>
@@ -76,7 +76,7 @@ function Comments({ comments }: { comments: Comment[] }) {
   return (
     <div className='flex flex-col'>
       {shortened &&
-        <div className='text-sm px-6 font-mono select-none'>
+        <div className='text-sm font-mono select-none px-2'>
           <span
             className='cursor-pointer py-2 hover:text-gray-500'
             onClick={() => setDisplayAll(true)}
@@ -180,13 +180,18 @@ function ContentItem(props: any) {
           <h1 className="text-center text-xl">{totalLikes}</h1>
           {/* <h1 className="text-center text-xl cursor-pointer hover:text-red-500 rotate-180">^</h1> */}
         </div>
-        <p className='whitespace-pre-line'>{text}</p>
+        <div className='flex flex-col gap-4 w-[100%]'>
+          <p className='whitespace-pre-line'>{text}</p>
+          <div className='text-gray-500'>
+            <Comments comments={comments} />
+            <CommentField onSubmit={addComment} />
+          </div>
+        </div>
+
 
       </div>
 
-      <Comments comments={comments} />
 
-      <CommentField onSubmit={addComment} />
     </div >
   )
 }
