@@ -1,4 +1,4 @@
-import { TextField } from "@fdb/ui/Common";
+import TextField from "@fdb/ui/common/TextField";
 import Button from "@fdb/ui/common/Button";
 import { BsGoogle, BsDiscord } from "react-icons/bs";
 import { useSession, signIn, signOut } from "next-auth/react";
@@ -30,12 +30,12 @@ export default function LoginPage() {
                 <TextField type='password' />
               </div>
               <div className="flex justify-end">
-                <Button onClick={() => setLoginSpin(!loginSpin)}>Submit</Button>
+                <Button onPress={() => setLoginSpin(!loginSpin)}>Submit</Button>
               </div>
             </div>
           </div>
           {/* sign up */}
-          <div className={`bg-green-400 rounded-lg shadow-lg ${signupSpin && 'transition-opacity opacity-0 duration-500'}`}>
+          <div className={`bg-green-400 rounded-lg shadow-lg ${signupSpin && 'transition-opacity opacity-0 duration-1000'}`}>
             <div className="flex flex-col gap-4 p-6 pb-6 ">
               <h1 className="text-3xl">Sign up</h1>
               <div>
@@ -47,15 +47,15 @@ export default function LoginPage() {
                 <TextField type='password' />
               </div>
               <div className="flex justify-end">
-                <Button onClick={() => setSignupSpin(!signupSpin)}>Submit</Button>
+                <Button onPress={() => setSignupSpin(!signupSpin)}>Submit</Button>
               </div>
             </div>
           </div>
         </div>
 
         <div className="flex flex-row justify-center gap-2">
-          <Button onClick={() => signIn("google", { callbackUrl: '/' })}><BsGoogle /></Button>
-          <Button onClick={() => signIn("discord", { callbackUrl: '/' })}><BsDiscord /></Button>
+          <Button onPress={() => signIn("google", { callbackUrl: '/' })}><BsGoogle /></Button>
+          <Button onPress={() => signIn("discord", { callbackUrl: '/' })}><BsDiscord /></Button>
         </div>
 
       </div>

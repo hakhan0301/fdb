@@ -26,39 +26,3 @@ export function TextArea({
     </div>
   )
 }
-
-
-interface FieldInputProps {
-  textValidation?: (str: string) => boolean;
-  onChange?: (str: string) => void;
-  type?: string;
-}
-
-export function TextField({
-  textValidation = (str: string) => true,
-  onChange = (str: string) => { },
-  type = 'text'
-}: FieldInputProps) {
-  const [text, setText] = useState('');
-  const [isError, setIsError] = useState(false);
-
-  const onText = (newText: string) => {
-    const isValid = textValidation(newText);
-    setIsError(!isValid);
-    setText(newText);
-    if (isValid) onChange(newText);
-  }
-
-  const border = isError ? 'border border-red-500' : 'border';
-
-  return (
-    <div className="">
-      <input
-        type={type}
-        className={`rounded-md bg-white-50 resize-y p-1 w-[100%] text-black ${border}`}
-        value={text}
-        onChange={(event) => onText(event.target.value)}
-      />
-    </div>
-  )
-}

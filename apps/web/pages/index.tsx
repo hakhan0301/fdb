@@ -6,8 +6,8 @@ import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
 
 import type { GetServerSideProps } from 'next';
 import { getSession, useSession } from 'next-auth/react';
-import { TextField } from '@fdb/ui';
 import Button from "@fdb/ui/common/Button";
+import TextField from "@fdb/ui/common/TextField";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -59,6 +59,16 @@ function NewPostField({ sessionUser }: any) {
   )
 }
 
+// COMMENTS ----------------------------------
+
+interface Comment {
+  text: string;
+  createdAt: string;
+  author: {
+    name: string;
+  }
+}
+
 function CommentField({ onSubmit }: any) {
   const [comment, setComment] = useState('');
 
@@ -69,19 +79,13 @@ function CommentField({ onSubmit }: any) {
 
   return (
     <div className='flex flex-row items-center gap-2 justify-start'>
-      <TextField onChange={setComment}
-        textValidation={str => str.length > 3 && str.length < 20} />
+      <TextField
+        onChange={setComment}
+        value={comment}
+        errorMessage={!(comment.length > 3 && comment.length < 20)} />
       <Button onPress={handleSubmit}><span className='text-sm'>Comment</span></Button>
     </div>
   );
-}
-
-interface Comment {
-  text: string;
-  createdAt: string;
-  author: {
-    name: string;
-  }
 }
 
 function Comment({
