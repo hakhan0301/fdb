@@ -1,4 +1,5 @@
-import { TextField, Button } from "@fdb/ui/Common";
+import { TextField } from "@fdb/ui/Common";
+import Button from "@fdb/ui/common/Button";
 import { BsGoogle, BsDiscord } from "react-icons/bs";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useState } from "react";

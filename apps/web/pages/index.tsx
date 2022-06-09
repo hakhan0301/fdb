@@ -6,7 +6,9 @@ import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
 
 import type { GetServerSideProps } from 'next';
 import { getSession, useSession } from 'next-auth/react';
-import { Button, TextArea, TextField } from '@fdb/ui';
+import { TextField } from '@fdb/ui';
+import Button from "@fdb/ui/common/Button";
+
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
   return {
@@ -22,7 +24,7 @@ export default function Home({ blogPosts }: any) {
   return (
     <div className="mx-auto max-w-xl">
       <div className="flex flex-col">
-        <NewPostField />
+        <NewPostField sessionUser={session?.data?.user} />
         {blogPosts.map((blogPost: any) => <ContentItem
           key={JSON.stringify(blogPost)}
           {...blogPost}
@@ -33,7 +35,7 @@ export default function Home({ blogPosts }: any) {
   )
 }
 
-function NewPostField({ }) {
+function NewPostField({ sessionUser }: any) {
   const [formShown, setFormShown] = useState(false);
 
   return (
@@ -43,7 +45,7 @@ function NewPostField({ }) {
           <button
             className='text-2xl cursor-pointer hover:text-rose-500 hover:animate-pulse'
             onClick={() => setFormShown(!formShown)}>
-            {formShown ? <BsChevronUp /> : <BsChevronDown />}
+            {formShown ? <BsChevronDown /> : <BsChevronUp />}
           </button>
           <span className='select-none'>New Post</span>
         </div>
@@ -69,7 +71,7 @@ function CommentField({ onSubmit }: any) {
     <div className='flex flex-row items-center gap-2 justify-start'>
       <TextField onChange={setComment}
         textValidation={str => str.length > 3 && str.length < 20} />
-      <Button onClick={handleSubmit}>c</Button>
+      <Button onPress={handleSubmit}><span className='text-sm'>Comment</span></Button>
     </div>
   );
 }

@@ -62,20 +62,3 @@ export function TextField({
     </div>
   )
 }
-
-
-
-export function Button({ children, onClick = () => { }, disabled = false }: any) {
-  return (
-    <button onClick={onClick} disabled={disabled}
-      className={`py-1 px-4 rounded-full text-white 
-        bg-gradient-to-b from-emerald-400 to-blue-400
-        ${disabled && 'bg-slate-500'}
-      `} >
-      <div className="select-none">
-        {children}
-
-      </div>
-    </button >
-  );
-}

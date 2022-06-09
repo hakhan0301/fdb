@@ -2,7 +2,6 @@ import { useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { GiHeartPlus, GiSettingsKnobs, GiChalkOutlineMurder } from "react-icons/gi";
 import Link from 'next/link';
-import { Button } from "@fdb/ui";
 import { useUser } from "./authHelpers";
 import { signOut } from "next-auth/react";
 

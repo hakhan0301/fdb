@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { GiHeartPlus } from "react-icons/gi";
 import { useRouter } from 'next/router';
-import { TextArea, Button } from '@fdb/ui/Common';
+import { TextArea } from '@fdb/ui/Common';
+import Button from "@fdb/ui/common/Button";
+
 
 export default function ContentList() {
   const [text, setText] = useState('SUSSSY BAKA');
@@ -29,7 +31,7 @@ export default function ContentList() {
             />
           </div>
           <div className="flex justify-end">
-            <Button onClick={submitBlogPost} disabled={disabledSubmit}>
+            <Button onPress={submitBlogPost} isDisabled={disabledSubmit}>
               <GiHeartPlus />
             </Button>
           </div>
