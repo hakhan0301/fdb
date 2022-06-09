@@ -16,7 +16,7 @@ export default function LoginPage() {
           {/* login */}
           <div className={`
               bg-gradient-to-br from-orange-400 to-pink-500 rounded-lg shadow-lg text-white
-              ${loginSpin && 'animate-spin'}`}
+              ${loginSpin && 'animate-spin relative'}`}
           >
             <div className="flex flex-col gap-4 p-6 pb-6">
               <h1 className="text-3xl">Login</h1>
@@ -34,7 +34,7 @@ export default function LoginPage() {
             </div>
           </div>
           {/* sign up */}
-          <div className={`bg-green-400 rounded-lg shadow-lg ${signupSpin && 'animate-spin'}`}>
+          <div className={`bg-green-400 rounded-lg shadow-lg ${signupSpin && 'transition-opacity opacity-0 duration-500'}`}>
             <div className="flex flex-col gap-4 p-6 pb-6 ">
               <h1 className="text-3xl">Sign up</h1>
               <div>
