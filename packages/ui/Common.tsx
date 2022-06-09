@@ -68,10 +68,9 @@ export function TextField({
 export function Button({ children, onClick = () => { }, disabled = false }: any) {
   return (
     <button onClick={onClick} disabled={disabled}
-      className={`py-2 px-4 rounded-full 
-        ${disabled ? 'bg-slate-500 border-white' : 'bg-pink-500 border-red-600'} 
-        border-2 text-white 
-        hover:animate-bounce 
+      className={`py-1 px-4 rounded-full text-white 
+        bg-gradient-to-b from-emerald-400 to-blue-400
+        ${disabled && 'bg-slate-500'}
       `} >
       <div className="select-none">
         {children}
