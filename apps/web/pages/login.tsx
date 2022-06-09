@@ -1,5 +1,5 @@
 import { TextField, Button } from "@fdb/ui/Common";
-import { BsGoogle } from "react-icons/bs";
+import { BsGoogle, BsDiscord } from "react-icons/bs";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useState } from "react";
 
@@ -54,6 +54,7 @@ export default function LoginPage() {
 
         <div className="flex flex-row justify-center gap-2">
           <Button onClick={() => signIn("google", { callbackUrl: '/' })}><BsGoogle /></Button>
+          <Button onClick={() => signIn("discord", { callbackUrl: '/' })}><BsDiscord /></Button>
         </div>
 
       </div>

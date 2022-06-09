@@ -9,8 +9,6 @@ export function useUser({
   const user = session.data?.user;
   const isLoading = session.status === 'loading';
 
-
-
   if (!user && !isLoading && router.route !== redirect) {
     router.push(redirect);
   }
