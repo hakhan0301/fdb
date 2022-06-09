@@ -2,6 +2,7 @@
 import { getBlogs } from '@fdb/db/models/blogs';
 import { useState } from 'react';
 import { debounce } from 'debounce';
+import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
 
 import type { GetServerSideProps } from 'next';
 import { getSession, useSession } from 'next-auth/react';
@@ -15,19 +16,43 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
-
 export default function Home({ blogPosts }: any) {
   const session = useSession();
 
   return (
     <div className="mx-auto max-w-xl">
       <div className="flex flex-col">
+        <NewPostField />
         {blogPosts.map((blogPost: any) => <ContentItem
           key={JSON.stringify(blogPost)}
           {...blogPost}
           sessionUser={session?.data?.user}
         />)}
       </div>
+    </div>
+  )
+}
+
+function NewPostField({ }) {
+  const [formShown, setFormShown] = useState(false);
+
+  return (
+    <div className="flex flex-col">
+      <div className='bg-gradient-to-r from-green-400 to-blue-500 text-white'>
+        <div className='flex flex-row items-center px-2 gap-2 py-2 w-fit'>
+          <button
+            className='text-2xl cursor-pointer hover:text-rose-500 hover:animate-pulse'
+            onClick={() => setFormShown(!formShown)}>
+            {formShown ? <BsChevronUp /> : <BsChevronDown />}
+          </button>
+          <span className='select-none'>New Post</span>
+        </div>
+      </div>
+      {formShown && (
+        <div className='flex flex-col gap-2 bg-emerald-100 p-2'>
+          susys baka
+        </div>
+      )}
     </div>
   )
 }
@@ -148,7 +173,7 @@ function ContentItem(props: any) {
   return (
     <div className="flex flex-col py-4 gap-4 bg-amber-100 md:border-x border-y border-yellow-600 border-opacity-20">
       <div
-        className='absolute text-sm text-gray-400 cursor-pointer'
+        className='absolute text-sm text-gray-400 cursor-pointer select-none'
         onClick={() => setDebug(!debug)}
       >d</div>
 
