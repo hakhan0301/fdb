@@ -72,12 +72,12 @@ function NewPostField({ sessionUser }: any) {
       {formShown && (
         <div className='flex flex-col bg-emerald-100 p-4'>
           <div className='px-1px'>Blog Text</div>
-          <div className='flex flex-row items-start gap-2'>
+          <div className='flex flex-col md:flex-row items-start gap-2'>
             <TextArea
-              className="flex-grow"
+              className="flex-grow w-[100%]"
               value={postValue} onChange={setPostValue}
             />
-            <Button onPress={submitBlogPost} isDisabled={submitting}>Submit Post</Button>
+            <Button onPress={submitBlogPost} isDisabled={submitting}>Post</Button>
           </div>
         </div>
       )}
@@ -209,7 +209,7 @@ function ContentItem(props: any) {
         onClick={() => setDebug(!debug)}
       >d</div>
 
-      <pre className={`${!debug && 'hidden'} pl-4`}>
+      <pre className={`${!debug && 'hidden'} pl-4 overflow-auto bg-stone-600 text-white`}>
         {JSON.stringify(props, null, 2)}
       </pre>
 
