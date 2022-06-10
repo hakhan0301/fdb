@@ -7,7 +7,9 @@ import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
 import type { GetServerSideProps } from 'next';
 import { getSession, useSession } from 'next-auth/react';
 import Button from "@fdb/ui/common/Button";
+import TextArea from "@fdb/ui/common/TextArea";
 import TextField from "@fdb/ui/common/TextField";
+import { useRouter } from 'next/router';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -36,7 +38,24 @@ export default function Home({ blogPosts }: any) {
 }
 
 function NewPostField({ sessionUser }: any) {
+  const router = useRouter();
+
   const [formShown, setFormShown] = useState(false);
+  const [postValue, setPostValue] = useState('');
+
+  const [submitting, setSubmitting] = useState(false)
+
+
+  const submitBlogPost = async () => {
+    setSubmitting(true);
+    await fetch('/api/blogs', {
+      method: 'POST',
+      body: postValue
+    });
+    setPostValue('');
+    setSubmitting(false);
+    router.push('/');
+  };
 
   return (
     <div className="flex flex-col">
@@ -51,8 +70,15 @@ function NewPostField({ sessionUser }: any) {
         </div>
       </div>
       {formShown && (
-        <div className='flex flex-col gap-2 bg-emerald-100 p-2'>
-          susys baka
+        <div className='flex flex-col bg-emerald-100 p-4'>
+          <div className='px-1px'>Blog Text</div>
+          <div className='flex flex-row items-start gap-2'>
+            <TextArea
+              className="flex-grow"
+              value={postValue} onChange={setPostValue}
+            />
+            <Button onPress={submitBlogPost} isDisabled={submitting}>Submit Post</Button>
+          </div>
         </div>
       )}
     </div>
