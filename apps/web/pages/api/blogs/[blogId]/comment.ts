@@ -23,9 +23,6 @@ async function POST_blog_comment(req: NextApiRequest, res: NextApiResponse, sess
   const blogId = parseInt(req.query.blogId as string, 10);
   const email = session.user?.email as string;
 
-  console.log(comment, blogId, email);
-
-
   try {
     await addComment(comment, blogId, email);
     return res.status(200).json({ error: false });
