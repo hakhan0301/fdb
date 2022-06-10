@@ -9,6 +9,7 @@ datasource db {
 
 model BlogPost {
   id        Int      @id @default(autoincrement())
+  type      String   @default("TEXT")
   text      String
   createdAt DateTime @default(now())
 
@@ -30,8 +31,7 @@ model User {
 
   blogs      BlogPost[] @relation("author")
   likedBlogs BlogPost[] @relation("likes")
-
-  comments Comment[]
+  comments   Comment[]
 }
 
 model Comment {
@@ -42,8 +42,8 @@ model Comment {
   authorId String
   author   User   @relation(fields: [authorId], references: [id])
 
-  BlogPost   BlogPost? @relation(fields: [blogPostId], references: [id])
   blogPostId Int
+  BlogPost   BlogPost? @relation(fields: [blogPostId], references: [id])
 }
 
 // -----------------------------auto--------------------------------

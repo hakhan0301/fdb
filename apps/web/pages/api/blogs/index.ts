@@ -20,10 +20,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 }
 
 async function POST_blog(req: NextApiRequest, res: NextApiResponse, session: Session) {
-  const { body }: { body: string } = req;
+  const { body }: { body: any } = req;
+
+  console.log(JSON.parse(body).body);
+
 
   try {
-    await addBlog(body, session.user?.email as string);
+    await addBlog(JSON.parse(body), session.user?.email as string);
     return res.status(200).json({ error: false });
   } catch (e) {
     console.error(e);

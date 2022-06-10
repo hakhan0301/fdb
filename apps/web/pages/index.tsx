@@ -7,9 +7,8 @@ import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
 import type { GetServerSideProps } from 'next';
 import { getSession, useSession } from 'next-auth/react';
 import Button from "@fdb/ui/common/Button";
-import TextArea from "@fdb/ui/common/TextArea";
 import TextField from "@fdb/ui/common/TextField";
-import { useRouter } from 'next/router';
+import NewPostField from "@fdb/ui/posts/NewPostField";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -22,65 +21,30 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
 export default function Home({ blogPosts }: any) {
   const session = useSession();
+  const [formShown, setFormShown] = useState(false);
 
   return (
     <div className="mx-auto max-w-xl">
       <div className="flex flex-col">
-        <NewPostField sessionUser={session?.data?.user} />
+        <div className="flex flex-col">
+          <div className='bg-gradient-to-r from-green-400 to-blue-500 text-white'>
+            <div className='flex flex-row items-center px-2 gap-2 py-2 w-fit'>
+              <button
+                className='text-2xl cursor-pointer hover:text-rose-500 hover:animate-pulse'
+                onClick={() => setFormShown(!formShown)}>
+                {formShown ? <BsChevronDown /> : <BsChevronUp />}
+              </button>
+              <span className='select-none'>New Post</span>
+            </div>
+          </div>
+          {formShown && <NewPostField />}
+        </div>
         {blogPosts.map((blogPost: any) => <ContentItem
           key={JSON.stringify(blogPost)}
           {...blogPost}
           sessionUser={session?.data?.user}
         />)}
       </div>
-    </div>
-  )
-}
-
-function NewPostField({ sessionUser }: any) {
-  const router = useRouter();
-
-  const [formShown, setFormShown] = useState(false);
-  const [postValue, setPostValue] = useState('');
-
-  const [submitting, setSubmitting] = useState(false)
-
-
-  const submitBlogPost = async () => {
-    setSubmitting(true);
-    await fetch('/api/blogs', {
-      method: 'POST',
-      body: postValue
-    });
-    setPostValue('');
-    setSubmitting(false);
-    router.push('/');
-  };
-
-  return (
-    <div className="flex flex-col">
-      <div className='bg-gradient-to-r from-green-400 to-blue-500 text-white'>
-        <div className='flex flex-row items-center px-2 gap-2 py-2 w-fit'>
-          <button
-            className='text-2xl cursor-pointer hover:text-rose-500 hover:animate-pulse'
-            onClick={() => setFormShown(!formShown)}>
-            {formShown ? <BsChevronDown /> : <BsChevronUp />}
-          </button>
-          <span className='select-none'>New Post</span>
-        </div>
-      </div>
-      {formShown && (
-        <div className='flex flex-col bg-emerald-100 p-4'>
-          <div className='px-1px'>Blog Text</div>
-          <div className='flex flex-col md:flex-row items-start gap-2'>
-            <TextArea
-              className="flex-grow w-[100%]"
-              value={postValue} onChange={setPostValue}
-            />
-            <Button onPress={submitBlogPost} isDisabled={submitting}>Post</Button>
-          </div>
-        </div>
-      )}
     </div>
   )
 }

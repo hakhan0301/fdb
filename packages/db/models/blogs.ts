@@ -44,10 +44,24 @@ export async function getBlogs(email: string | undefined | null = '') {
   });
 }
 
-export async function addBlog(text: string, email: string) {
+interface TextPost {
+  type: 'text',
+  body: string
+}
+
+interface LinkPost {
+  type: 'link',
+  body: {
+    title: string,
+    url: string,
+  }
+}
+
+type PostContent = TextPost | LinkPost;
+export async function addBlog(content: PostContent, email: string) {
   return prisma.blogPost.create({
     data: {
-      text,
+      text: typeof content.body == 'string' ? content.body : JSON.stringify(content.body),
       author: { connect: { email: email } }
     }
   });

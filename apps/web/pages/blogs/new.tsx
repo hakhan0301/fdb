@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { GiHeartPlus } from "react-icons/gi";
 import { useRouter } from 'next/router';
-import { TextArea } from '@fdb/ui/Common';
+import TextArea from '@fdb/ui/common/TextArea';
 import Button from "@fdb/ui/common/Button";
 
 
