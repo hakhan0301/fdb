@@ -9,7 +9,7 @@ datasource db {
 
 model BlogPost {
   id        Int      @id @default(autoincrement())
-  type      String   @default("TEXT")
+  type      String   @default("text")
   text      String
   createdAt DateTime @default(now())
 

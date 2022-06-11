@@ -34,10 +34,9 @@ function Tab({ item, state }) {
     <div
       {...tabProps}
       ref={ref}
-      className={`px-2 py-1 select-none cursor-pointer 
-        w-fit
+      className={`px-2 select-none cursor-pointer 
         border-b border-rose-800
-        text-black bg-gradient-to-t from-yellow-300 to-pink-300
+        text-black 	
         w-[100%]
         ${isSelected ? 'border-rose-800 border-b-4' : ''}`}
       style={{

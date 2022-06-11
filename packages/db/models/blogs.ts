@@ -1,4 +1,5 @@
 import { prisma } from '../index';
+import type { PostContent } from './types';
 
 export async function getBlogs(email: string | undefined | null = '') {
   const blogPost = await prisma.blogPost.findMany({
@@ -44,23 +45,10 @@ export async function getBlogs(email: string | undefined | null = '') {
   });
 }
 
-interface TextPost {
-  type: 'text',
-  body: string
-}
-
-interface LinkPost {
-  type: 'link',
-  body: {
-    title: string,
-    url: string,
-  }
-}
-
-type PostContent = TextPost | LinkPost;
 export async function addBlog(content: PostContent, email: string) {
   return prisma.blogPost.create({
     data: {
+      type: content.type,
       text: typeof content.body == 'string' ? content.body : JSON.stringify(content.body),
       author: { connect: { email: email } }
     }
