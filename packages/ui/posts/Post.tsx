@@ -126,10 +126,10 @@ function Content(content: PostContent) {
             <span>{content.body.title}</span>
             <span className="select-none">:</span>
           </div>
-          <div className="text-xs flex items-center bg-red-200">
+          <div className="text-xs flex items-center bg-orange-300 px-1">
             <span className="select-none">(</span>
             <a href={content.body.url} target="_blank" rel="noreferrer noopener"
-              className="text-blue-500 hover:border-b border-blue-500"
+              className="text-sky-500 hover:border-b border-sky-500"
             >
               {content.body.url}
             </a>

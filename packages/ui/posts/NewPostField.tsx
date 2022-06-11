@@ -27,7 +27,12 @@ function LinkContentField({ }: any) {
   const [url, setUrl] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
+  const isValidURL = isWebUri(url);
+  const isValidTitle = !(title.length < 3 || title.length > 100);
+
   const submitBlogPost = async () => {
+    if (!isValidURL || !isValidTitle) return;
+
     setSubmitting(true);
     await fetch('/api/blogs', {
       method: 'POST',
@@ -49,7 +54,7 @@ function LinkContentField({ }: any) {
           <TextField
             className="flex-grow"
             label="Title"
-            errorMessage={title.length < 3 || title.length > 200}
+            errorMessage={!isValidTitle}
             value={title} onChange={setTitle}
           />
         </div>
@@ -57,7 +62,7 @@ function LinkContentField({ }: any) {
           <TextField
             label="URL"
             className="flex-grow"
-            errorMessage={!isWebUri(url)}
+            errorMessage={!isValidURL}
             value={url} onChange={setUrl}
           />
         </div>
@@ -73,7 +78,10 @@ function TextContentField({ }: any) {
   const [postValue, setPostValue] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
+  const isValidText = !(postValue.length < 3 || postValue.length > 300);
+
   const submitBlogPost = async () => {
+    if (!isValidText) return;
     setSubmitting(true);
     await fetch('/api/blogs', {
       method: 'POST',
@@ -88,12 +96,13 @@ function TextContentField({ }: any) {
 
 
   return (
-    <div className="bg-yellow-50 p-2 pb-3">
-      <div className='px-1px'>Post Text</div>
-      <div className='flex flex-col md:flex-row items-start gap-2'>
+    <div className="bg-yellow-50 p-4">
+      <div className='flex flex-col items-end gap-3'>
         <TextArea
+          label="Post Text"
           className="flex-grow w-[100%]"
           value={postValue} onChange={setPostValue}
+          errorMessage={!isValidText}
         />
         <Button onPress={submitBlogPost} isDisabled={submitting}>Post</Button>
       </div>
