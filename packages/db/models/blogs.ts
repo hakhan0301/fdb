@@ -49,7 +49,7 @@ export async function addBlog(content: PostContent, email: string) {
   return prisma.blogPost.create({
     data: {
       type: content.type,
-      text: typeof content.body == 'string' ? content.body : JSON.stringify(content.body),
+      text: JSON.stringify(content.body),
       author: { connect: { email: email } }
     }
   });

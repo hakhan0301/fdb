@@ -4,8 +4,12 @@ import type { AriaTextFieldProps } from "@react-types/textfield";
 
 export default function TextField(props: AriaTextFieldProps & { className?: string }) {
   let ref = useRef() as RefObject<HTMLInputElement>;
-  let { labelProps, inputProps, descriptionProps, errorMessageProps } = useTextField(props, ref);
+  let { labelProps, inputProps, descriptionProps, errorMessageProps } = useTextField({
+    ...props,
+    "aria-label": 'stop'
+  }, ref);
   let { label } = props;
+
 
   return (
     <div className={`${props.className} flex flex-col`}>
