@@ -9,6 +9,18 @@ export default function LoginPage() {
   const [loginSpin, setLoginSpin] = useState(false);
   const [signupSpin, setSignupSpin] = useState(false);
 
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const signUp = async (username: string, password: string) => {
+    await fetch('/api/auth/signUp', {
+      body: JSON.stringify({ username, password }),
+      method: 'POST'
+    });
+    setUsername("");
+    setPassword("");
+  };
+
   return (
     <div className="py-6 text-white">
       <div className="flex flex-col gap-6">
@@ -23,14 +35,15 @@ export default function LoginPage() {
               <h1 className="text-3xl">Login</h1>
               <div>
                 <h1>Username:</h1>
-                <TextField />
+                <TextField value={username} onChange={setUsername} />
               </div>
               <div>
                 <h1>Password:</h1>
-                <TextField type='password' />
+                <TextField type='password' value={password} onChange={setPassword} />
               </div>
               <div className="flex justify-end">
-                <Button onPress={() => setLoginSpin(!loginSpin)}>Submit</Button>
+                <Button onPress={() => signIn('credentials', { username, password, callbackUrl: '/test' })}>Submit</Button>
+                {/* <Button onPress={() => setLoginSpin(!loginSpin)}>Submit</Button> */}
               </div>
             </div>
           </div>
@@ -40,14 +53,15 @@ export default function LoginPage() {
               <h1 className="text-3xl">Sign up</h1>
               <div>
                 <h1>Username:</h1>
-                <TextField />
+                <TextField value={username} onChange={setUsername} />
               </div>
               <div>
                 <h1>Password:</h1>
-                <TextField type='password' />
+                <TextField type='password' value={password} onChange={setPassword} />
               </div>
               <div className="flex justify-end">
-                <Button onPress={() => setSignupSpin(!signupSpin)}>Submit</Button>
+                <Button onPress={() => signUp(username, password)}>Submit</Button>
+                {/* <Button onPress={() => setSignupSpin(!signupSpin)}>Submit</Button> */}
               </div>
             </div>
           </div>

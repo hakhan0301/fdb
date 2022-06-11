@@ -46,6 +46,11 @@ model Comment {
   BlogPost   BlogPost? @relation(fields: [blogPostId], references: [id])
 }
 
+model UserAuth {
+  username String @id
+  password String
+}
+
 // -----------------------------auto--------------------------------
 
 model Account {
