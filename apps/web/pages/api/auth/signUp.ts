@@ -25,17 +25,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 async function POST_signUp(req: NextApiRequest, res: NextApiResponse) {
   const { body }: { body: any } = req;
 
-  const { username, password } = JSON.parse(body);
+  const { username, password }: { username: string, password: string } = JSON.parse(body);
   console.log(username, password);
 
   if (!username || !password) {
     throw new Error('invalid username or password');
   }
 
-
-  await prisma.userAuth.create({
-    data: { username, password }
+  await prisma.user.create({
+    data: { name: username, password }
   });
+
+  console.log(`created user : ${username}`);
+
 
   return res.status(200).json({ error: false });
 }

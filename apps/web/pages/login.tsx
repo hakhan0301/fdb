@@ -66,12 +66,6 @@ export default function LoginPage() {
             </div>
           </div>
         </div>
-
-        <div className="flex flex-row justify-center gap-2">
-          <Button onPress={() => signIn("google", { callbackUrl: '/' })}><BsGoogle /></Button>
-          <Button onPress={() => signIn("discord", { callbackUrl: '/' })}><BsDiscord /></Button>
-        </div>
-
       </div>
 
 
