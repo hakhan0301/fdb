@@ -35,7 +35,7 @@ export default function LoginPage() {
               <h1 className="text-3xl">Login</h1>
               <div>
                 <h1>Username:</h1>
-                <TextField value={username} onChange={setUsername} />
+                <TextField type='username' value={username} onChange={setUsername} />
               </div>
               <div>
                 <h1>Password:</h1>
@@ -53,7 +53,7 @@ export default function LoginPage() {
               <h1 className="text-3xl">Sign up</h1>
               <div>
                 <h1>Username:</h1>
-                <TextField value={username} onChange={setUsername} />
+                <TextField type='username' value={username} onChange={setUsername} />
               </div>
               <div>
                 <h1>Password:</h1>
