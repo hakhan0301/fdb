@@ -1,7 +1,7 @@
+import { genSalt, hash } from 'bcrypt';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { prisma } from '@fdb/db';
-import { GiPerspectiveDiceSixFacesRandom } from 'react-icons/gi';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
@@ -31,8 +31,13 @@ async function POST_signUp(req: NextApiRequest, res: NextApiResponse) {
     throw new Error('invalid username or password');
   }
 
+  const passwordHash = await hash(password, await genSalt(10));
+
   await prisma.user.create({
-    data: { name: username, password }
+    data: {
+      name: username,
+      password: passwordHash
+    }
   });
 
   console.log(`created user : ${username}`);

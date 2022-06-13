@@ -1,7 +1,9 @@
 import NextAuth from "next-auth";
+import Credentials from "next-auth/providers/credentials";
+
+import { compare } from "bcrypt";
 
 import { prisma } from "@fdb/db";
-import Credentials from "next-auth/providers/credentials";
 
 export default NextAuth({
   providers: [
@@ -12,13 +14,13 @@ export default NextAuth({
       },
       async authorize(credentials, req) {
         const user = await prisma.user.findFirst({
-          where: {
-            name: credentials?.username,
-            password: credentials?.password,
-          }
+          where: { name: credentials?.username }
         });
 
         if (!user) return null;
+
+        const passwordsMatch = await compare(credentials?.password as string, user?.password);
+        if (!passwordsMatch) return null;
 
         return {
           id: user.id,
