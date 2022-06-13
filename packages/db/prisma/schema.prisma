@@ -29,6 +29,8 @@ model User {
   blogs      BlogPost[] @relation("author")
   likedBlogs BlogPost[] @relation("likes")
   comments   Comment[]
+
+  @@unique([name])
 }
 
 model Comment {
