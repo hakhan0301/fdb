@@ -34,7 +34,7 @@ export default NextAuth({
       return token;
     },
     session: ({ session, token }) => {
-      session.user = { ...session.user, ...token.user };
+      session.user = { ...session.user, ...token.user as any };
       return session;
     }
   },
