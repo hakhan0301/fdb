@@ -21,7 +21,7 @@ export default NextAuth({
         if (!user) return null;
 
         return {
-          userId: user.id,
+          id: user.id,
           name: user.name,
           image: user.image
         };
