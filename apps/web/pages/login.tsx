@@ -13,12 +13,14 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
 
   const signUp = async (username: string, password: string) => {
+    setUsername("");
+    setPassword("");
     await fetch('/api/auth/signUp', {
       body: JSON.stringify({ username, password }),
       method: 'POST'
     });
-    setUsername("");
-    setPassword("");
+
+    signIn('credentials', { username, password, callbackUrl: '/' });
   };
 
   return (
@@ -42,7 +44,7 @@ export default function LoginPage() {
                 <TextField type='password' value={password} onChange={setPassword} />
               </div>
               <div className="flex justify-end">
-                <Button onPress={() => signIn('credentials', { username, password, callbackUrl: '/test' })}>Submit</Button>
+                <Button onPress={() => signIn('credentials', { username, password, callbackUrl: '/' })}>Submit</Button>
                 {/* <Button onPress={() => setLoginSpin(!loginSpin)}>Submit</Button> */}
               </div>
             </div>

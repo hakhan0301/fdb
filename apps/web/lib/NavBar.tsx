@@ -32,7 +32,7 @@ export default function NavBar() {
       <div className={`${menuHidden ? 'hidden' : 'fixed'} right-0`}>
         <div className="text-2xl text-pink-50">
           <div className="flex flex-col bg-purple-700 py-2 gap-1">
-            <Link href="/blogs/new" >
+            {/* <Link href="/blogs/new" >
               <div onClick={toggleMenu} className="flex gap-2 items-center select-none cursor-pointer pl-3 pr-16 py-2 bg-purple-600">
                 <GiHeartPlus /> Add Blog
               </div>
@@ -41,7 +41,7 @@ export default function NavBar() {
               <div onClick={toggleMenu} className="flex gap-2 items-center select-none cursor-pointer pl-3 pr-16 py-2 bg-purple-600">
                 <GiSettingsKnobs /> Edit Profile
               </div>
-            </Link>
+            </Link> */}
             <div onClick={() => { signOut(); toggleMenu(); }} className="flex gap-2 items-center select-none cursor-pointer pl-3 pr-16 py-2 bg-purple-600">
               <GiChalkOutlineMurder /> Sign Out
             </div>
