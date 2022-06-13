@@ -21,6 +21,7 @@
     "@react-stately/menu": "^3.3.0",
     "@react-stately/tabs": "^3.1.0",
     "@react-stately/tree": "^3.3.0",
+    "aws-sdk": "^2.1152.0",
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
     "debounce": "^1.2.1",
@@ -29,6 +30,7 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-icons": "^4.3.1",
+    "uuid": "^8.3.2",
     "valid-url": "^1.0.9"
   },
   "devDependencies": {
@@ -38,6 +40,7 @@
     "@types/bcrypt": "^5.0.0",
     "@types/node": "^17.0.12",
     "@types/react": "17.0.37",
+    "@types/uuid": "^8.3.4",
     "@types/valid-url": "^1.0.3",
     "autoprefixer": "^10.4.7",
     "eslint": "7.32.0",
