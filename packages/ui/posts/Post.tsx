@@ -123,7 +123,7 @@ function Content(content: PostContent) {
           <div className="text-xs flex items-center bg-orange-300 px-1">
             <span className="select-none">(</span>
             <a href={content.body.url} target="_blank" rel="noreferrer noopener"
-              className="text-sky-500 hover:border-b border-sky-500"
+              className="text-sky-500 border-b border-opacity-0 border-sky-500 hover:border-opacity-100"
             >
               {content.body.url}
             </a>
