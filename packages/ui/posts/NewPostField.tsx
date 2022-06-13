@@ -168,7 +168,7 @@ function ImageContentField({ }: any) {
             value={title} onChange={setTitle}
           />
         </div>
-        <div className="w-[100%]">
+        <div className="w-[100%] box-border">
           <input type="file" accept="image/*" ref={ref}
             onChange={(e) => onImage(e.target.files && e.target.files[0])} />
         </div>
