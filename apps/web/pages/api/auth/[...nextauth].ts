@@ -29,15 +29,11 @@ export default NextAuth({
     }),
   ],
   callbacks: {
-    jwt: ({ token, user, account, profile }) => {
-      console.log({ token, user, account, profile });
+    jwt: ({ token, user }) => {
       if (user) token.user = user;
-
       return token;
     },
-    session: ({ session, user, token }) => {
-      console.log({ session, user, token });
-
+    session: ({ session, token }) => {
       session.user = { ...session.user, ...token.user };
       return session;
     }
