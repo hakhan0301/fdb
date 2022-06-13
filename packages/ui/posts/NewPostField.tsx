@@ -2,7 +2,7 @@ import TextArea from "@fdb/ui/common/TextArea";
 import TextField from "@fdb/ui/common/TextField";
 import Button from "@fdb/ui/common/Button";
 import { useRouter } from 'next/router';
-import { useState } from "react";
+import { LegacyRef, useRef, useState } from "react";
 import { Tabs, TabItem } from "../common/Tabs";
 
 import { isWebUri } from 'valid-url';
@@ -58,6 +58,7 @@ function TextContentField({ }: any) {
     </div>
   );
 }
+const isValidTitle = (title: string) => !(title.length < 3 || title.length > 100);
 
 function LinkContentField({ }: any) {
   const router = useRouter();
@@ -67,10 +68,9 @@ function LinkContentField({ }: any) {
   const [submitting, setSubmitting] = useState(false);
 
   const isValidURL = isWebUri(url);
-  const isValidTitle = !(title.length < 3 || title.length > 100);
 
   const submitBlogPost = async () => {
-    if (!isValidURL || !isValidTitle) return;
+    if (!isValidURL || !isValidTitle(title)) return;
 
     setSubmitting(true);
     await fetch('/api/blogs', {
@@ -93,7 +93,7 @@ function LinkContentField({ }: any) {
           <TextField
             className="flex-grow"
             label="Title"
-            errorMessage={!isValidTitle}
+            errorMessage={!isValidTitle(title)}
             value={title} onChange={setTitle}
           />
         </div>
@@ -114,32 +114,41 @@ function LinkContentField({ }: any) {
 
 function ImageContentField({ }: any) {
   const router = useRouter();
-  const [submitting, setSubmitting] = useState(false);
+  const ref: any = useRef();
 
-  //create image usestate
+  const [title, setTitle] = useState('');
+  const [submitting, setSubmitting] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
 
   const submitImage = async () => {
+
+    if (!isValidTitle(title)) return;
     if (!imageFile) return;
 
-    const [bytes, url] = await Promise.all([
-      imageFile.arrayBuffer(),
-      fetch('/api/images/generateURL').then(res => res.text())
-    ]);
+    setSubmitting(true);
 
-    await fetch(url, {
+    const res = await fetch('/api/images/generateURL');
+    const imageUploadURL = await res.text();
+
+    await fetch(imageUploadURL, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      },
+      headers: { 'Content-Type': 'multipart/form-data' },
       body: imageFile
     });
 
 
+    await fetch('/api/blogs', {
+      method: 'POST',
+      body: JSON.stringify({
+        type: 'image', body: { title, url: imageUploadURL.split('?')[0] }
+      })
+    });
 
-    console.log(bytes, url);
-
-
+    setTitle('');
+    ref.current.value = "";
+    setImageFile(null);
+    setSubmitting(false);
+    router.push('/');
   };
 
   const onImage = (imageFile: File | null) => {
@@ -150,8 +159,17 @@ function ImageContentField({ }: any) {
   return (
     <div className="bg-yellow-50 p-4">
       <div className='flex flex-col items-end gap-3'>
+
+        <div className="flex items-center gap-2 w-[100%]">
+          <TextField
+            className="flex-grow"
+            label="Title"
+            errorMessage={!isValidTitle(title)}
+            value={title} onChange={setTitle}
+          />
+        </div>
         <div className="w-[100%]">
-          <input type="file" accept="image/*"
+          <input type="file" accept="image/*" ref={ref}
             onChange={(e) => onImage(e.target.files && e.target.files[0])} />
         </div>
         <Button onPress={submitImage} isDisabled={submitting}>Post</Button>

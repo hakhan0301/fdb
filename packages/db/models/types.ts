@@ -12,4 +12,12 @@ export interface LinkPost {
   }
 }
 
-export type PostContent = TextPost | LinkPost;
+export interface ImagePost {
+  type: 'image',
+  body: {
+    title: string,
+    url: string,
+  }
+}
+
+export type PostContent = TextPost | LinkPost | ImagePost;

@@ -1,8 +1,9 @@
+import ModalImage from "react-modal-image-responsive";
 import { useState } from "react";
 import { debounce } from 'debounce';
 import { CommentField, Comments } from "./Comments";
 
-import type { PostContent } from '@fdb/db/models/types';
+import type { ImagePost, LinkPost, PostContent } from '@fdb/db/models/types';
 
 export default function Post(props: any) {
   const {
@@ -112,26 +113,49 @@ function Content(content: PostContent) {
   switch (content.type) {
     case 'text':
       return <p className='whitespace-pre-line'>{content.body}</p>;
-
     case 'link':
-      return (
-        <div className="flex gap-1 items-baselin">
-          <div>
-            <span>{content.body.title}</span>
-            <span className="select-none">:</span>
-          </div>
-          <div className="text-xs flex items-center bg-orange-300 px-1">
-            <span className="select-none">(</span>
-            <a href={content.body.url} target="_blank" rel="noreferrer noopener"
-              className="text-sky-500 border-b border-opacity-0 border-sky-500 hover:border-opacity-100"
-            >
-              {content.body.url}
-            </a>
-            <span className="select-none">)</span>
-          </div>
-        </div>
-      );
+      return <LinkContent content={content} />;
+    case 'image':
+      return <ImageContent content={content} />;
     default:
       return <p>EROR</p>
   }
+}
+
+function ImageContent({ content }: { content: ImagePost }) {
+  return (
+    <div className="flex flex-col gap-1 items-baselin">
+      <div>
+        <span className="text-2xl">{content.body.title}</span>
+      </div>
+
+      <ModalImage
+        className="w-full h-auto max-h-32"
+        small={content.body.url}
+        large={content.body.url}
+        hideDownload hideZoom
+      />
+
+    </div>
+  );
+}
+
+function LinkContent({ content }: { content: LinkPost }) {
+  return (
+    <div className="flex gap-1 items-baselin">
+      <div>
+        <span>{content.body.title}</span>
+        <span className="select-none">:</span>
+      </div>
+      <div className="text-xs flex items-center bg-orange-300 px-1">
+        <span className="select-none">(</span>
+        <a href={content.body.url} target="_blank" rel="noreferrer noopener"
+          className="text-sky-500 border-b border-opacity-0 border-sky-500 hover:border-opacity-100"
+        >
+          {content.body.url}
+        </a>
+        <span className="select-none">)</span>
+      </div>
+    </div>
+  );
 }
