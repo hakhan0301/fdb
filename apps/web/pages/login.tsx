@@ -4,8 +4,9 @@ import { BsGoogle, BsDiscord } from "react-icons/bs";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useState } from "react";
 
-export default function LoginPage() {
+const isValidString = (str: string) => str.length > 3 && str.length < 100;
 
+export default function LoginPage() {
   const [loginSpin, setLoginSpin] = useState(false);
   const [signupSpin, setSignupSpin] = useState(false);
 
@@ -13,6 +14,9 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
 
   const signUp = async (username: string, password: string) => {
+    if (!isValidString(username)) return;
+    if (!isValidString(password)) return;
+
     setUsername("");
     setPassword("");
     await fetch('/api/auth/signUp', {
@@ -37,11 +41,15 @@ export default function LoginPage() {
               <h1 className="text-3xl">Login</h1>
               <div>
                 <h1>Username:</h1>
-                <TextField type='username' value={username} onChange={setUsername} />
+                <TextField type='username' value={username} onChange={setUsername}
+                  errorMessage={!isValidString(username)}
+                />
               </div>
               <div>
                 <h1>Password:</h1>
-                <TextField type='password' value={password} onChange={setPassword} />
+                <TextField type='password' value={password} onChange={setPassword}
+                  errorMessage={!isValidString(password)}
+                />
               </div>
               <div className="flex justify-end">
                 <Button onPress={() => signIn('credentials', { username, password, callbackUrl: '/' })}>Submit</Button>
@@ -55,11 +63,15 @@ export default function LoginPage() {
               <h1 className="text-3xl">Sign up</h1>
               <div>
                 <h1>Username:</h1>
-                <TextField type='username' value={username} onChange={setUsername} />
+                <TextField type='username' value={username} onChange={setUsername}
+                  errorMessage={!isValidString(username)}
+                />
               </div>
               <div>
                 <h1>Password:</h1>
-                <TextField type='password' value={password} onChange={setPassword} />
+                <TextField type='password' value={password} onChange={setPassword}
+                  errorMessage={!isValidString(password)}
+                />
               </div>
               <div className="flex justify-end">
                 <Button onPress={() => signUp(username, password)}>Submit</Button>
