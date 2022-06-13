@@ -26,7 +26,6 @@ async function POST_signUp(req: NextApiRequest, res: NextApiResponse) {
   const { body }: { body: any } = req;
 
   const { username, password }: { username: string, password: string } = JSON.parse(body);
-  console.log(username, password);
 
   if (!username || !password) {
     throw new Error('invalid username or password');

@@ -21,10 +21,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 async function POST_blog_like(req: NextApiRequest, res: NextApiResponse, session: Session) {
   const blogId = parseInt(req.query.blogId as string, 10);
-  const email = session.user?.email as string;
+  const userId = session.user?.id as string;
 
   try {
-    await dislikeBlog(blogId, email);
+    await dislikeBlog(blogId, userId);
     return res.status(200).json({ error: false });
   } catch (e) {
     console.error(e);

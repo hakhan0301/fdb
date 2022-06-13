@@ -21,10 +21,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 async function POST_blog_comment(req: NextApiRequest, res: NextApiResponse, session: Session) {
   const comment = req.body;
   const blogId = parseInt(req.query.blogId as string, 10);
-  const email = session.user?.email as string;
+  const id = session.user?.id as string;
 
   try {
-    await addComment(comment, blogId, email);
+    await addComment(comment, blogId, id);
     return res.status(200).json({ error: false });
   } catch (e) {
     console.error(e);

@@ -1,13 +1,9 @@
 import NextAuth from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-import DiscordProvider from "next-auth/providers/discord";
-import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
 import { prisma } from "@fdb/db";
 import Credentials from "next-auth/providers/credentials";
 
 export default NextAuth({
-  // adapter: PrismaAdapter(prisma),
   providers: [
     Credentials({
       credentials: {
@@ -25,14 +21,30 @@ export default NextAuth({
         if (!user) return null;
 
         return {
-          "name": user.name,
-          "image": user.image
+          userId: user.id,
+          name: user.name,
+          image: user.image
         };
       },
     }),
   ],
+  callbacks: {
+    jwt: ({ token, user, account, profile }) => {
+      console.log({ token, user, account, profile });
+      if (user) token.user = user;
+
+      return token;
+    },
+    session: ({ session, user, token }) => {
+      console.log({ session, user, token });
+
+      session.user = { ...session.user, ...token.user };
+      return session;
+    }
+  },
   session: {
-    strategy: "jwt"
+    strategy: "jwt",
+
   },
   pages: {
     signIn: '/login',

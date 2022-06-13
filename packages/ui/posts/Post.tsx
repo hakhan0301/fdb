@@ -59,12 +59,6 @@ export default function Post(props: any) {
   }, 300);
 
   try {
-    JSON.parse(body)
-  } catch {
-    console.log(body)
-  }
-
-  try {
     return (
       <div className="flex flex-col py-4 gap-4 bg-amber-100 md:border-x border-y border-yellow-600 border-opacity-20">
         <div
