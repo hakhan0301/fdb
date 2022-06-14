@@ -133,7 +133,7 @@ function ImageContent({ content }: { content: ImagePost }) {
         className="w-full h-auto max-h-32"
         small={content.body.url}
         large={content.body.url}
-        hideDownload hideZoom
+        hideDownload
       />
 
     </div>

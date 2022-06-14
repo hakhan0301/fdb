@@ -1,3 +1,4 @@
+// @ts-ignore
 import ModalImage from "react-modal-image-responsive";
 import TextField from "@fdb/ui/common/TextField";
 import Button from "@fdb/ui/common/Button";
@@ -105,19 +106,25 @@ export default function ImageContentField({ }: any) {
 
 
         {imagePreview
-          ? (<div className="flex flex-col gap-1 items-end">
+          ? (<div className="flex flex-col p-2 gap-1 items-end w-[100%] bg-pink-100 border border-pink-300 shadow-lg">
             <AiOutlineClose
               className="cursor-pointer hover:text-red-600"
               onClick={() => setImageFile(null)}
             />
-            <ModalImage
-              className="w-full h-auto max-h-32"
-              small={imagePreview}
-              large={imagePreview}
-              hideDownload hideZoom
-            />
+            <div className="flex justify-center w-full h-auto">
+              <ModalImage
+                className="w-full h-auto"
+                small={imagePreview}
+                large={imagePreview}
+                hideDownload hideZoom
+              />
+            </div>
           </div>)
-          : <OuterDragArea onChange={onImage} />
+          : (
+            <div className="w-full shadow-lg">
+              <OuterDragArea onChange={onImage} />
+            </div>
+          )
         }
 
         <Button onPress={submitImage} isDisabled={submitting}>Post</Button>
