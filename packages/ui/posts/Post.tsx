@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 // @ts-ignore
 import ModalImage from "react-modal-image-responsive";
 import { useState } from "react";
@@ -72,34 +73,35 @@ export default function Post(props: any) {
           {JSON.stringify(props, null, 2)}
         </pre>
 
-        <div className="flex flex-row px-4 items-center gap-4">
-          <img
-            alt={"user logo"}
-            className="w-12 h-12 rounded-2xl shadow-md object-cover		"
-            src={image}
-          />
+        <div className="flex flex-row p-4 gap-3">
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col items-center gap-1">
+              <img alt="user" src={image}
+                className="w-12 h-12 rounded-2xl shadow-md object-cover"
+              />
+              <h1 className="text-sm text-gray-600">{name}</h1>
+              <h1 className="text-xs text-gray-600">{new Date(createdAt).toLocaleDateString()}</h1>
+            </div>
 
-          <div className="flex flex-col">
-            <h1 className="text-lg font-bold">{name}</h1>
-            <h1 className="text-sm text-gray-600">{new Date(createdAt).toLocaleDateString()}</h1>
-          </div>
-        </div>
-
-        <div className="flex flex-row gap-4 px-4">
-          <div className="w-12 justify-self-center shrink-0">
-            <h1 onClick={likedByUser ? dislikePost : likePost}
-              className={`text-center text-xl cursor-pointer select-none
+            <div className="w-12 justify-self-center shrink-0">
+              <h1 onClick={likedByUser ? dislikePost : likePost}
+                className={`text-center text-xl cursor-pointer select-none
                       ${likedByUser ? 'text-green-400' : 'text-black'}
                       ${likedByUser ? 'hover:text-red-500' : 'hover:text-green-400 '}          
             `}
-            >^</h1>
-            <h1 className="text-center text-xl">{totalLikes}</h1>
+              >^</h1>
+              <h1 className="text-center text-xl">{totalLikes}</h1>
+            </div>
           </div>
-          <div className='flex flex-col gap-4 w-[100%]'>
-            <Content body={JSON.parse(body)} type={type} />
-            <div className='text-gray-500'>
-              <Comments comments={comments} />
-              <CommentField onSubmit={addComment} />
+
+          <div className="w-[100%]">
+
+            <div className='flex flex-col justify-between gap-4 w-[100%] h-[100%]'>
+              <Content body={JSON.parse(body)} type={type} />
+              <div className='text-gray-500'>
+                <Comments comments={comments} />
+                <CommentField onSubmit={addComment} />
+              </div>
             </div>
           </div>
         </div>
