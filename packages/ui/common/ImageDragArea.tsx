@@ -4,7 +4,11 @@ import { AiOutlineClose, AiOutlinePlus } from 'react-icons/ai';
 import { useEffect, useState } from "react";
 import { useDropzone } from 'react-dropzone';
 
-export default function ImageDragArea({ onChange }: { onChange: (image: File) => void }) {
+interface Props {
+  onChange?: ((image: File) => void) | null
+}
+
+export default function ImageDragArea({ onChange = null }: Props = {}) {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
 
@@ -27,12 +31,13 @@ export default function ImageDragArea({ onChange }: { onChange: (image: File) =>
   useEffect(() => {
     if (acceptedFiles.length == 0) return;
     setImageFile(acceptedFiles[0]);
-    onChange(acceptedFiles[0]);
+    if (onChange)
+      onChange(acceptedFiles[0]);
   }, [acceptedFiles, onChange]);
 
   if (imagePreview)
     return (
-      <div className="flex flex-col p-2 gap-1 items-end w-[100%] bg-pink-100 border border-pink-300 shadow-lg">
+      <div className={`flex flex-col p-2 gap-1 items-end w-[100%] bg-pink-100 border border-pink-300 shadow-lg`}>
         <AiOutlineClose
           className="cursor-pointer hover:text-red-600"
           onClick={() => setImageFile(null)}
