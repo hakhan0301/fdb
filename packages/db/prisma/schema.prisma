@@ -24,7 +24,7 @@ model User {
   id       String @id @default(cuid())
   name     String
   password String
-  image    String @default("https://lh3.googleusercontent.com/a-/AOh14Gj2pEcMh-szNOOK7zK_xSOhPDwj5GVRio4LIB0r=s96-c")
+  image    String @default("https://vimcare.com/assets/empty_user-e28be29d09f6ea715f3916ebebb525103ea068eea8842da42b414206c2523d01.png")
 
   blogs      BlogPost[] @relation("author")
   likedBlogs BlogPost[] @relation("likes")
