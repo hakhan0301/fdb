@@ -15,7 +15,6 @@ export default function ImageDragArea({ onChange = null }: Props = {}) {
 
   const { getRootProps, getInputProps, isFocused, acceptedFiles } = useDropzone({
     multiple: false,
-
     maxSize: 10000000,
     accept: { 'image/*': [] },
   });
@@ -33,9 +32,13 @@ export default function ImageDragArea({ onChange = null }: Props = {}) {
   useEffect(() => {
     if (acceptedFiles.length == 0) return;
     setImageFile(acceptedFiles[0]);
+  }, [acceptedFiles]);
+
+  useEffect(() => {
+    if (!imageFile) return;
     if (onChange)
-      onChange(acceptedFiles[0]);
-  }, [acceptedFiles, onChange]);
+      onChange(imageFile);
+  }, [imageFile, onChange]);
 
   return (
     <div className="w-full">
