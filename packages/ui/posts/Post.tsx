@@ -1,3 +1,4 @@
+// @ts-ignore
 import ModalImage from "react-modal-image-responsive";
 import { useState } from "react";
 import { debounce } from 'debounce';
