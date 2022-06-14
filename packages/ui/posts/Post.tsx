@@ -68,7 +68,7 @@ export default function Post(props: any) {
 
   try {
     return (
-      <div className={`flex flex-col py-4 sm:border-x border-y border-blue-600 border-opacity-20 ${index % 2 ? 'bg-sky-100' : 'bg-sky-50'}`}>
+      <div className={`flex flex-col break-words py-4 sm:border-x border-y border-blue-600 border-opacity-20 ${index % 2 ? 'bg-sky-100' : 'bg-sky-50'}`}>
         <div
           className='absolute text-xs text-sky-200 cursor-pointer select-none'
           onClick={() => setDebug(!debug)}><FaSearch /></div>
@@ -136,7 +136,7 @@ function TextContent({ content }: { content: TextPost }) {
   return <div className="max-w-4xl p-4 text-gray-800 bg-white shadow">
     <div className="mb-2">
       <div className="h-3 text-3xl text-left text-gray-600 select-none">“</div>
-      <p className="px-8 font-serif text-gray-600 text-center break-words">
+      <p className="px-8 font-serif text-gray-600 text-center">
         {content.body}
       </p>
       <div className="h-3 text-3xl text-right text-gray-600 select-none">”</div>
