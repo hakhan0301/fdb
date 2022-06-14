@@ -5,6 +5,7 @@ import { useState } from "react";
 import { debounce } from 'debounce';
 import { CommentField, Comments } from "./Comments";
 import { FaSearch, } from 'react-icons/fa';
+import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
 
 import type { ImagePost, LinkPost, PostContent, TextPost } from '@fdb/db/models/types';
 
@@ -146,19 +147,18 @@ function TextContent({ content }: { content: TextPost }) {
 
 function LinkContent({ content }: { content: LinkPost }) {
   return (
-    <div className="flex gap-1 py-2">
-      <div>
+    <div className="flex flex-col px-4 pt-2">
+      <div className="text-lg font-semibold">
         <span>{content.body.title}</span>
         <span className="select-none">:</span>
       </div>
-      <div className="text-md flex items-center bg-orange-100 px-1">
-        <span className="select-none">(</span>
+      <div className="text-sm flex items-center text-gray-500">
+        <span className="select-none flex items-center"><MdOutlineKeyboardArrowRight className="text-lg" /></span>
         <a href={content.body.url} target="_blank" rel="noreferrer noopener"
-          className="text-sky-500 border-b border-opacity-0 border-sky-500 hover:border-opacity-100"
+          className="pt-[.15rem] text-sky-500 border-b border-opacity-0 border-sky-500 hover:border-opacity-100"
         >
           {content.body.url}
         </a>
-        <span className="select-none">)</span>
       </div>
     </div>
   );
