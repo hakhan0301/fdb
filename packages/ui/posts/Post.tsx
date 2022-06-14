@@ -4,8 +4,10 @@ import ModalImage from "react-modal-image-responsive";
 import { useState } from "react";
 import { debounce } from 'debounce';
 import { CommentField, Comments } from "./Comments";
+import { FaSearch } from 'react-icons/fa';
 
 import type { ImagePost, LinkPost, PostContent } from '@fdb/db/models/types';
+
 
 export default function Post(props: any) {
   const {
@@ -63,11 +65,11 @@ export default function Post(props: any) {
 
   try {
     return (
-      <div className="flex flex-col py-4 gap-4 bg-amber-100 md:border-x border-y border-yellow-600 border-opacity-20">
+      <div className="flex flex-col py-4 bg-amber-100 md:border-x border-y border-yellow-600 border-opacity-20">
         <div
-          className='absolute text-sm text-gray-400 cursor-pointer select-none'
+          className='absolute text-xs text-amber-200 cursor-pointer select-none'
           onClick={() => setDebug(!debug)}
-        >d</div>
+        ><FaSearch /></div>
 
         <pre className={`${!debug && 'hidden'} pl-4 overflow-auto bg-stone-600 text-white`}>
           {JSON.stringify(props, null, 2)}
@@ -76,10 +78,10 @@ export default function Post(props: any) {
         <div className="flex flex-row p-4 gap-3">
           <div className="flex flex-col gap-4">
             <div className="flex flex-col items-center gap-1">
+              <h1 className="text-sm text-purple-800">{name}</h1>
               <img alt="user" src={image}
                 className="w-12 h-12 rounded-2xl shadow-md object-cover"
               />
-              <h1 className="text-sm text-gray-600">{name}</h1>
               <h1 className="text-xs text-gray-600">{new Date(createdAt).toLocaleDateString()}</h1>
             </div>
 
