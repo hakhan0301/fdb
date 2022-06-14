@@ -6,9 +6,9 @@ import { debounce } from 'debounce';
 import { CommentField, Comments } from "./Comments";
 import { FaSearch, } from 'react-icons/fa';
 import { MdOutlineKeyboardArrowRight } from 'react-icons/md';
+import { AiFillHeart } from 'react-icons/ai';
 
 import type { ImagePost, LinkPost, PostContent, TextPost } from '@fdb/db/models/types';
-
 
 
 export default function Post(props: any) {
@@ -77,14 +77,14 @@ export default function Post(props: any) {
         </pre>
 
         <div className="flex flex-row items-center gap-2 mx-2 px-1 pb-2 border-b">
-          <div className="flex flex-col">
+          <div className="flex flex-col items-center">
             <div className="px-2 justify-self-center shrink-0">
               <h1 onClick={likedByUser ? dislikePost : likePost}
                 className={`text-center text-xl cursor-pointer select-none
-                      ${likedByUser ? 'text-green-400' : 'text-black'}
-                      ${likedByUser ? 'hover:text-red-500' : 'hover:text-green-400 '}          
+                      ${likedByUser ? 'text-red-500' : 'text-black'}
+                      ${likedByUser ? 'hover:text-black' : 'hover:text-red-500 '}          
             `}
-              >^</h1>
+              ><AiFillHeart /></h1>
               <h1 className="text-center text-xl">{totalLikes}</h1>
             </div>
           </div>
