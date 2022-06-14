@@ -75,7 +75,7 @@ export default function Post(props: any) {
         <div className="flex flex-row px-4 items-center gap-4">
           <img
             alt={"user logo"}
-            className="w-12 h-12 rounded-2xl shadow-md"
+            className="w-12 h-12 rounded-2xl shadow-md object-cover		"
             src={image}
           />
 
