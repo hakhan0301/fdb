@@ -1,10 +1,12 @@
+import ModalImage from "react-modal-image-responsive";
 import TextField from "@fdb/ui/common/TextField";
 import Button from "@fdb/ui/common/Button";
 import { useRouter } from 'next/router';
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDropzone } from 'react-dropzone';
 
-
+//import cross from react icons
+import { AiOutlineClose } from 'react-icons/ai';
 import { AiOutlinePlus } from 'react-icons/ai';
 
 import { isValidTitle } from "../helpers";
@@ -25,7 +27,8 @@ function OuterDragArea({ onChange }: { onChange: (image: File) => void }) {
   return (
     <>
       <div {...getRootProps({ className: 'w-[100%]', onChange: console.log })}>
-        <div className={`flex items-center justify-center bg-pink-100 p-10
+        <div className={`flex items-center justify-center bg-pink-100 p-10 cursor-pointer
+          ${isFocused ? '' : 'hover:border-emerald-200'}
           border-dashed border-2 ${isFocused ? 'border-emerald-400' : 'border-red-400'}`}
         >
           <input {...getInputProps()} onChange={() => console.log('susy')} />
@@ -39,12 +42,21 @@ function OuterDragArea({ onChange }: { onChange: (image: File) => void }) {
 
 export default function ImageContentField({ }: any) {
   const router = useRouter();
-  const ref: any = useRef();
 
   const [title, setTitle] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
 
+  useEffect(() => {
+    if (!imageFile) {
+      setImagePreview(null);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(imageFile);
+    setImagePreview(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [imageFile])
 
   const submitImage = async () => {
     if (!isValidTitle(title)) return;
@@ -70,7 +82,6 @@ export default function ImageContentField({ }: any) {
     });
 
     setTitle('');
-    // ref.current.value = "";
     setImageFile(null);
     setSubmitting(false);
     router.push('/');
@@ -93,11 +104,22 @@ export default function ImageContentField({ }: any) {
         </div>
 
 
-        <OuterDragArea onChange={onImage} />
-        {/* <div className="w-[100%] box-border">
-          <input type="file" accept="image/*" ref={ref}
-            onChange={(e) => onImage(e.target.files && e.target.files[0])} />
-        </div> */}
+        {imagePreview
+          ? (<div className="flex flex-col gap-1 items-end">
+            <AiOutlineClose
+              className="cursor-pointer hover:text-red-600"
+              onClick={() => setImageFile(null)}
+            />
+            <ModalImage
+              className="w-full h-auto max-h-32"
+              small={imagePreview}
+              large={imagePreview}
+              hideDownload hideZoom
+            />
+          </div>)
+          : <OuterDragArea onChange={onImage} />
+        }
+
         <Button onPress={submitImage} isDisabled={submitting}>Post</Button>
       </div>
     </div>
