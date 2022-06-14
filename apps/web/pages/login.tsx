@@ -4,7 +4,7 @@ import { BsGoogle, BsDiscord } from "react-icons/bs";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useState } from "react";
 
-const isValidString = (str: string) => str.length > 3 && str.length < 100;
+const isValidString = (str: string) => str.length >= 3 && str.length < 100;
 
 export default function LoginPage() {
   const [loginSpin, setLoginSpin] = useState(false);
@@ -24,7 +24,7 @@ export default function LoginPage() {
       method: 'POST'
     });
 
-    signIn('credentials', { username, password, callbackUrl: '/' });
+    signIn('credentials', { username, password, callbackUrl: '/user/pfp' });
   };
 
   return (
