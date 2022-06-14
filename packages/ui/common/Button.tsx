@@ -10,9 +10,10 @@ export default function Button(props: AriaButtonProps<"button">) {
   return (
     <button {...buttonProps} ref={ref} type="button"
       className={`py-2 px-4 rounded-full text-white border-0 outline-none
-        shadow-lg bg-gradient-to-b from-emerald-400 to-cyan-400
+        bg-gradient-to-b from-emerald-400 to-cyan-400
         disabled:from-slate-400 disabled:to-slate-500
         hover:from-orange-300 hover:to-rose-300
+        hover:shadow-lg
       `}>
       {children}
     </button>
