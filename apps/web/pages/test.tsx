@@ -6,9 +6,10 @@ export default function Component() {
   return (
     <div className="flex h-[100%] flex-col gap-12 p-12 bg-slate-700 text-white">
       <pre className="bg-purple-900 p-6 overflow-auto">
-        {JSON.stringify(session, null, 2)}
-
-        {window.location.hostname}
+        session: {JSON.stringify(session, null, 2)}
+      </pre>
+      <pre className="bg-purple-900 p-6 overflow-auto">
+        window.location.hostname: {window.location.hostname}
       </pre>
     </div>
   );
