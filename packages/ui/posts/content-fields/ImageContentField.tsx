@@ -1,44 +1,10 @@
-// @ts-ignore
-import ModalImage from "react-modal-image-responsive";
 import TextField from "@fdb/ui/common/TextField";
 import Button from "@fdb/ui/common/Button";
 import { useRouter } from 'next/router';
-import { useEffect, useState } from "react";
-import { useDropzone } from 'react-dropzone';
-
-//import cross from react icons
-import { AiOutlineClose } from 'react-icons/ai';
-import { AiOutlinePlus } from 'react-icons/ai';
+import { useState } from "react";
 
 import { isValidTitle } from "../helpers";
-
-
-function OuterDragArea({ onChange }: { onChange: (image: File) => void }) {
-  const { getRootProps, getInputProps, isFocused, acceptedFiles } = useDropzone({
-    multiple: false,
-    maxSize: 10000000,
-    accept: { 'image/*': [] },
-  });
-
-  useEffect(() => {
-    if (acceptedFiles.length == 0) return;
-    onChange(acceptedFiles[0]);
-  }, [acceptedFiles, onChange]);
-
-  return (
-    <>
-      <div {...getRootProps({ className: 'w-[100%]', onChange: console.log })}>
-        <div className={`flex items-center justify-center bg-pink-100 p-10 cursor-pointer
-          ${isFocused ? '' : 'hover:border-emerald-200'}
-          border-dashed border-2 ${isFocused ? 'border-emerald-400' : 'border-red-400'}`}
-        >
-          <input {...getInputProps()} onChange={() => console.log('susy')} />
-          <AiOutlinePlus className={`${isFocused ? 'text-emerald-400' : 'text-red-400'} text-2xl`} />
-        </div>
-      </div>
-    </>
-  );
-}
+import ImageDragArea from "../../common/ImageDragArea";
 
 
 export default function ImageContentField({ }: any) {
@@ -47,17 +13,6 @@ export default function ImageContentField({ }: any) {
   const [title, setTitle] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-
-  useEffect(() => {
-    if (!imageFile) {
-      setImagePreview(null);
-      return;
-    }
-    const objectUrl = URL.createObjectURL(imageFile);
-    setImagePreview(objectUrl);
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [imageFile])
 
   const submitImage = async () => {
     if (!isValidTitle(title)) return;
@@ -104,28 +59,7 @@ export default function ImageContentField({ }: any) {
           />
         </div>
 
-
-        {imagePreview
-          ? (<div className="flex flex-col p-2 gap-1 items-end w-[100%] bg-pink-100 border border-pink-300 shadow-lg">
-            <AiOutlineClose
-              className="cursor-pointer hover:text-red-600"
-              onClick={() => setImageFile(null)}
-            />
-            <div className="flex justify-center w-full h-auto">
-              <ModalImage
-                className="w-full h-auto"
-                small={imagePreview}
-                large={imagePreview}
-                hideDownload hideZoom
-              />
-            </div>
-          </div>)
-          : (
-            <div className="w-full shadow-lg">
-              <OuterDragArea onChange={onImage} />
-            </div>
-          )
-        }
+        <ImageDragArea onChange={onImage} />
 
         <Button onPress={submitImage} isDisabled={submitting}>Post</Button>
       </div>
