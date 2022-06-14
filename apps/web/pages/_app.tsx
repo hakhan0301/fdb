@@ -1,4 +1,4 @@
-import NavBar from '../lib/NavBar';
+import NavBar from '@fdb/ui/webapp/NavBar';
 import '../styles/globals.css';
 import Head from 'next/head';
 import { SessionProvider } from "next-auth/react";
