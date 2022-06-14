@@ -4,9 +4,10 @@ import ModalImage from "react-modal-image-responsive";
 import { useState } from "react";
 import { debounce } from 'debounce';
 import { CommentField, Comments } from "./Comments";
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, } from 'react-icons/fa';
 
 import type { ImagePost, LinkPost, PostContent } from '@fdb/db/models/types';
+
 
 
 export default function Post(props: any) {
@@ -16,6 +17,7 @@ export default function Post(props: any) {
     text: body,
     author,
     createdAt,
+    index,
     comments: initialComments,
     totalLikes: initialLikes,
     likedByUser: initialLikedByUser
@@ -65,27 +67,17 @@ export default function Post(props: any) {
 
   try {
     return (
-      <div className="flex flex-col py-4 bg-amber-100 md:border-x border-y border-yellow-600 border-opacity-20">
+      <div className={`flex flex-col py-4 sm:border-x border-y border-blue-600 border-opacity-20 ${index % 2 ? 'bg-sky-100' : 'bg-sky-50'}`}>
         <div
-          className='absolute text-xs text-amber-200 cursor-pointer select-none'
-          onClick={() => setDebug(!debug)}
-        ><FaSearch /></div>
-
+          className='absolute text-xs text-sky-200 cursor-pointer select-none'
+          onClick={() => setDebug(!debug)}><FaSearch /></div>
         <pre className={`${!debug && 'hidden'} pl-4 overflow-auto bg-stone-600 text-white`}>
           {JSON.stringify(props, null, 2)}
         </pre>
 
-        <div className="flex flex-row p-4 gap-3">
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col items-center gap-1">
-              <h1 className="text-sm text-purple-800">{name}</h1>
-              <img alt="user" src={image}
-                className="w-12 h-12 rounded-2xl shadow-md object-cover"
-              />
-              <h1 className="text-xs text-gray-600">{new Date(createdAt).toLocaleDateString()}</h1>
-            </div>
-
-            <div className="w-12 justify-self-center shrink-0">
+        <div className="flex flex-row items-center gap-2 mx-2 px-1 pb-2 border-b">
+          <div className="flex flex-col">
+            <div className="px-2 justify-self-center shrink-0">
               <h1 onClick={likedByUser ? dislikePost : likePost}
                 className={`text-center text-xl cursor-pointer select-none
                       ${likedByUser ? 'text-green-400' : 'text-black'}
@@ -96,15 +88,26 @@ export default function Post(props: any) {
             </div>
           </div>
 
-          <div className="w-[100%]">
+          <img alt="user" src={image}
+            className="w-12 h-12 rounded-2xl shadow-md object-cover"
+          />
+          <div className="flex flex-col">
+            <h1 className="text-sm text-purple-800">{name}</h1>
+            <h1 className="text-xs text-gray-600">{new Date(createdAt).toLocaleDateString()}</h1>
+          </div>
+        </div>
 
-            <div className='flex flex-col justify-between gap-4 w-[100%] h-[100%]'>
+        <div className="flex flex-row py-1 gap-1 w-[100%]">
+          <div className='flex flex-col justify-between gap-4 w-[100%] h-[100%]'>
+            <div className="flex-grow">
               <Content body={JSON.parse(body)} type={type} />
-              <div className='text-gray-500'>
-                <Comments comments={comments} />
-                <CommentField onSubmit={addComment} />
-              </div>
             </div>
+          </div>
+        </div>
+        <div className='flex flex-col pt-2 gap-1'>
+          <Comments comments={comments} className="sm:px-2" />
+          <div className="px-2">
+            <CommentField className="flex-grow" onSubmit={addComment} />
           </div>
         </div>
       </div >
@@ -127,23 +130,6 @@ function Content(content: PostContent) {
   }
 }
 
-function ImageContent({ content }: { content: ImagePost }) {
-  return (
-    <div className="flex flex-col gap-1 items-baselin">
-      <div>
-        <span className="text-2xl">{content.body.title}</span>
-      </div>
-
-      <ModalImage
-        className="w-full h-auto max-h-32"
-        small={content.body.url}
-        large={content.body.url}
-        hideDownload
-      />
-
-    </div>
-  );
-}
 
 function LinkContent({ content }: { content: LinkPost }) {
   return (
@@ -161,6 +147,26 @@ function LinkContent({ content }: { content: LinkPost }) {
         </a>
         <span className="select-none">)</span>
       </div>
+    </div>
+  );
+}
+
+function ImageContent({ content }: { content: ImagePost }) {
+  return (
+    <div className="flex flex-col">
+      <div className="text-2xl px-2 sm:px-3">
+        {content.body.title}
+      </div>
+
+      <div className="border-none">
+        <ModalImage
+          className="w-full h-auto max-h-32 sm:p-1 sm:px-3"
+          small={content.body.url}
+          large={content.body.url}
+          hideDownload
+        />
+      </div>
+
     </div>
   );
 }

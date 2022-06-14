@@ -1,6 +1,7 @@
 import { useState } from "react";
-import Button from "../common/Button";
+import Button, { BaseButton } from "../common/Button";
 import TextField from "../common/TextField";
+import { BsChat } from 'react-icons/bs';
 
 export interface Comment {
   text: string;
@@ -24,29 +25,29 @@ export function CommentField({ onSubmit }: any) {
         onChange={setComment}
         value={comment}
         errorMessage={!(comment.length > 3 && comment.length < 20)} />
-      <Button onPress={handleSubmit}><span className='text-sm'>Comment</span></Button>
+      <BaseButton className="p-2 rounded-full" onPress={handleSubmit}><BsChat /></BaseButton>
     </div>
   );
 }
 
 export function Comment({
-  text, createdAt, author, index
-}: Comment & { index: number }) {
+  text, createdAt, author, index, className
+}: Comment & { index: number, className?: string }) {
   const bgColor = index % 2 === 0 ? 'bg-amber-50' : 'bg-amber-100';
   return (
-    <div className={`flex flex-row items-center gap-2 justify-start py-1 px-2 ${bgColor}`}>
+    <div className={`${className} flex flex-row items-center gap-2 justify-start py-1 px-2 ${bgColor}`}>
       <div className='text-sm'>{author.name}<span className='select-none'>:</span></div>
       <div>{text}</div>
     </div>
   );
 }
 
-export function Comments({ comments }: { comments: Comment[] }) {
+export function Comments({ comments, className }: { comments: Comment[], className?: string }) {
   const [displayAll, setDisplayAll] = useState(false);
   const displayedComments = displayAll ? comments : comments.slice(-3);
   const shortened = displayedComments.length < comments.length;
   return (
-    <div className='flex flex-col'>
+    <div className={`${className} flex flex-col`}>
       {shortened &&
         <div className='text-sm font-mono select-none px-2'>
           <span

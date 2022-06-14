@@ -23,26 +23,30 @@ export default function Home({ blogPosts }: any) {
   const [formShown, setFormShown] = useState(false);
 
   return (
-    <div className="mx-auto max-w-xl">
-      <div className="flex flex-col">
+    <div className='flex-grow bg-slate-50'>
+      <div className="mx-auto max-w-xl">
         <div className="flex flex-col">
-          <div className='bg-gradient-to-r from-green-400 to-blue-500 text-white'>
-            <div className='flex flex-row items-center px-2 gap-2 py-2 w-fit'>
-              <button
-                className='text-2xl cursor-pointer hover:text-rose-500 hover:animate-pulse'
-                onClick={() => setFormShown(!formShown)}>
-                {formShown ? <BsChevronDown /> : <BsChevronUp />}
-              </button>
-              <span className='select-none'>New Post</span>
+          <div className="flex flex-col">
+            <div className='bg-gradient-to-r from-green-400 to-blue-500 text-white'>
+              <div className='flex flex-row items-center px-2 gap-2 py-2 w-fit'>
+                <button
+                  className='text-2xl cursor-pointer hover:text-rose-500 hover:animate-pulse'
+                  onClick={() => setFormShown(!formShown)}>
+                  {formShown ? <BsChevronDown /> : <BsChevronUp />}
+                </button>
+                <span className='select-none'>New Post</span>
+              </div>
             </div>
+            {formShown && <NewPostField />}
           </div>
-          {formShown && <NewPostField />}
+          <div className='flex flex-col gap-4'>
+            {blogPosts.map((blogPost: any, index: number) => <Post
+              key={JSON.stringify(blogPost)}
+              {...blogPost} index={index}
+              sessionUser={session?.data?.user}
+            />)}
+          </div>
         </div>
-        {blogPosts.map((blogPost: any) => <Post
-          key={JSON.stringify(blogPost)}
-          {...blogPost}
-          sessionUser={session?.data?.user}
-        />)}
       </div>
     </div>
   )
