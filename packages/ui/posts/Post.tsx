@@ -6,7 +6,7 @@ import { debounce } from 'debounce';
 import { CommentField, Comments } from "./Comments";
 import { FaSearch, } from 'react-icons/fa';
 
-import type { ImagePost, LinkPost, PostContent } from '@fdb/db/models/types';
+import type { ImagePost, LinkPost, PostContent, TextPost } from '@fdb/db/models/types';
 
 
 
@@ -97,14 +97,14 @@ export default function Post(props: any) {
           </div>
         </div>
 
-        <div className="flex flex-row py-1 gap-1 w-[100%]">
+        <div className="flex flex-row gap-1 w-[100%]">
           <div className='flex flex-col justify-between gap-4 w-[100%] h-[100%]'>
             <div className="flex-grow">
               <Content body={JSON.parse(body)} type={type} />
             </div>
           </div>
         </div>
-        <div className='flex flex-col pt-2 gap-1'>
+        <div className='flex flex-col pt-2 gap-2'>
           <Comments comments={comments} className="sm:px-2" />
           <div className="px-2">
             <CommentField className="flex-grow" onSubmit={addComment} />
@@ -120,7 +120,7 @@ export default function Post(props: any) {
 function Content(content: PostContent) {
   switch (content.type) {
     case 'text':
-      return <p className='whitespace-pre-line'>{content.body}</p>;
+      return <TextContent content={content} />;
     case 'link':
       return <LinkContent content={content} />;
     case 'image':
@@ -130,15 +130,28 @@ function Content(content: PostContent) {
   }
 }
 
+function TextContent({ content }: { content: TextPost }) {
+
+  return <div className="max-w-4xl p-4 text-gray-800 bg-white rounded-lg shadow">
+    <div className="mb-2">
+      <div className="h-3 text-3xl text-left text-gray-600 select-none">“</div>
+      <p className="px-8 font-serif text-gray-600 text-center">
+        {content.body}
+      </p>
+      <div className="h-3 text-3xl text-right text-gray-600 select-none">”</div>
+    </div>
+  </div>
+}
+
 
 function LinkContent({ content }: { content: LinkPost }) {
   return (
-    <div className="flex gap-1 items-baselin">
+    <div className="flex gap-1 py-2">
       <div>
         <span>{content.body.title}</span>
         <span className="select-none">:</span>
       </div>
-      <div className="text-xs flex items-center bg-orange-300 px-1">
+      <div className="text-md flex items-center bg-orange-100 px-1">
         <span className="select-none">(</span>
         <a href={content.body.url} target="_blank" rel="noreferrer noopener"
           className="text-sky-500 border-b border-opacity-0 border-sky-500 hover:border-opacity-100"
@@ -154,13 +167,13 @@ function LinkContent({ content }: { content: LinkPost }) {
 function ImageContent({ content }: { content: ImagePost }) {
   return (
     <div className="flex flex-col">
-      <div className="text-2xl px-2 sm:px-3">
-        {content.body.title}
+      <div className="text-lg font-semibold pt-2 pb-1 px-2">
+        {content.body.title}<span className="select-none">:</span>
       </div>
 
       <div className="border-none">
         <ModalImage
-          className="w-full h-auto max-h-32 sm:p-1 sm:px-3"
+          className="w-full h-auto max-h-32 pb-1"
           small={content.body.url}
           large={content.body.url}
           hideDownload
