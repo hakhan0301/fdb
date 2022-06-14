@@ -136,7 +136,7 @@ function TextContent({ content }: { content: TextPost }) {
   return <div className="max-w-4xl p-4 text-gray-800 bg-white shadow">
     <div className="mb-2">
       <div className="h-3 text-3xl text-left text-gray-600 select-none">“</div>
-      <p className="px-8 font-serif text-gray-600 text-center">
+      <p className="px-8 font-serif text-gray-600 text-center break-words">
         {content.body}
       </p>
       <div className="h-3 text-3xl text-right text-gray-600 select-none">”</div>
@@ -167,8 +167,8 @@ function LinkContent({ content }: { content: LinkPost }) {
 function ImageContent({ content }: { content: ImagePost }) {
   return (
     <div className="flex flex-col">
-      <div className="text-lg font-semibold pt-2 pb-1 px-2">
-        {content.body.title}<span className="select-none">:</span>
+      <div className="text-xl font-semibold pt-2 pb-1 px-2">
+        {content.body.title}
       </div>
 
       <div className="border-none">

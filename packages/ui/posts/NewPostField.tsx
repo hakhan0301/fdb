@@ -15,9 +15,9 @@ export default function NewPostField({ }: any) {
   return (
     <div className='bg-emerald-100 p-4'>
       <Tabs >
+        <TabItem title="Image"><ImageContentField /></TabItem>
         <TabItem title="Text"><TextContentField /></TabItem>
         <TabItem title="Link"><LinkContentField /></TabItem>
-        <TabItem title="Image"><ImageContentField /></TabItem>
       </Tabs>
     </div>
   )

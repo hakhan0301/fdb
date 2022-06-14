@@ -35,10 +35,10 @@ function Tab({ item, state }) {
       {...tabProps}
       ref={ref}
       className={`px-2 select-none cursor-pointer 
-        border-b border-rose-800
+        border-b border-cyan-500
         text-black 	
         w-[100%]
-        ${isSelected ? 'border-rose-800 border-b-4' : ''}`}
+        ${isSelected ? 'border-cyan-500 border-b-4' : ''}`}
       style={{
         opacity: isDisabled ? '0.5' : undefined
       }}
