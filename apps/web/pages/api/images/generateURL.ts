@@ -1,8 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { S3 } from 'aws-sdk';
-
+import S3 from 'aws-sdk/clients/s3';
 
 const s3 = new S3({
   region: process.env.IMAGE_BUCKET_REGION,
