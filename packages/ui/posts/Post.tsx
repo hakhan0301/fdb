@@ -133,7 +133,7 @@ function Content(content: PostContent) {
 
 function TextContent({ content }: { content: TextPost }) {
 
-  return <div className="max-w-4xl p-4 text-gray-800 bg-white rounded-lg shadow">
+  return <div className="max-w-4xl p-4 text-gray-800 bg-white shadow">
     <div className="mb-2">
       <div className="h-3 text-3xl text-left text-gray-600 select-none">“</div>
       <p className="px-8 font-serif text-gray-600 text-center">
@@ -147,7 +147,7 @@ function TextContent({ content }: { content: TextPost }) {
 
 function LinkContent({ content }: { content: LinkPost }) {
   return (
-    <div className="flex flex-col px-4 pt-2">
+    <div className="flex flex-col m-1 px-4 pt-2">
       <div className="text-lg font-semibold">
         <span>{content.body.title}</span>
         <span className="select-none">:</span>
