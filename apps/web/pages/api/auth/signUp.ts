@@ -6,8 +6,6 @@ import { prisma } from '@fdb/db';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
 
-
-
   try {
     switch (method) {
       case 'POST':

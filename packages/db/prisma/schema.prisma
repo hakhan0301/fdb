@@ -30,6 +30,11 @@ model User {
   likedBlogs BlogPost[] @relation("likes")
   comments   Comment[]
 
+  // streaks & bans
+  streaks    Int      @default(0)
+  strikes    Int      @default(0)
+  lastStrike DateTime @default(now())
+
   @@unique([name])
 }
 
