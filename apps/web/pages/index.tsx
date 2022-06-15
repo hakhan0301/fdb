@@ -28,7 +28,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   return {
     props: {
-      blogPosts: await getBlogs(session?.user?.email),
+      // @ts-ignore
+      blogPosts: await getBlogs(session?.user?.id),
       // @ts-ignore
       userStrikes: newUser?.strikes || 0,
       // @ts-ignore

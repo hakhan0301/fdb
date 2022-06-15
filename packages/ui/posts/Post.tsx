@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 // @ts-ignore
 import ModalImage from "react-modal-image-responsive";
-import { useState } from "react";
+import { MouseEventHandler, useState } from "react";
 import { debounce } from 'debounce';
 import { CommentField, Comments } from "./Comments";
 import { FaSearch, } from 'react-icons/fa';
@@ -33,23 +33,15 @@ export default function Post(props: any) {
   const [comments, setComments] = useState(initialComments);
 
   const likePost = debounce(async () => {
-    try {
-      await fetch(`/api/blogs/like/${id}`, {
-        method: 'POST'
-      });
-      setTotalLikes(totalLikes + 1);
-      setLikedByUser(true);
-    } catch { }
+    await fetch(`/api/blogs/like/${id}`, { method: 'POST' });
+    setTotalLikes(totalLikes + 1);
+    setLikedByUser(true);
   }, 300);
 
   const dislikePost = debounce(async () => {
-    try {
-      await fetch(`/api/blogs/dislike/${id}`, {
-        method: 'POST'
-      });
-      setTotalLikes(totalLikes - 1);
-      setLikedByUser(false);
-    } catch { }
+    await fetch(`/api/blogs/dislike/${id}`, { method: 'POST' });
+    setTotalLikes(totalLikes - 1);
+    setLikedByUser(false);
   }, 300);
 
   const addComment = debounce(async (comment: string) => {
@@ -79,12 +71,11 @@ export default function Post(props: any) {
         <div className="flex flex-row items-center gap-2 mx-2 px-1 pb-2 border-b">
           <div className="flex flex-col items-center">
             <div className="px-2 justify-self-center shrink-0">
-              <h1 onClick={likedByUser ? dislikePost : likePost}
+              <button onClick={likedByUser ? dislikePost : likePost}
                 className={`text-center text-xl cursor-pointer select-none
                       ${likedByUser ? 'text-red-500' : 'text-black'}
                       ${likedByUser ? 'hover:text-black' : 'hover:text-red-500 '}          
-            `}
-              ><AiFillHeart /></h1>
+            `}><AiFillHeart /></button>
               <h1 className="text-center text-xl">{totalLikes}</h1>
             </div>
           </div>
