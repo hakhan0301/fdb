@@ -34,7 +34,9 @@ async function POST_signUp(req: NextApiRequest, res: NextApiResponse) {
   await prisma.user.create({
     data: {
       name: username,
-      password: passwordHash
+      password: passwordHash,
+      lastPost: new Date(),
+      lastStrike: new Date(),
     }
   });
 

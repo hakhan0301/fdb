@@ -1,16 +1,20 @@
 import { prisma } from "..";
 
-function isBeforeYesterdayMorning(time: Date) {
+export function isBeforeYesterdayMorning(time: Date) {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   yesterday.setHours(0, 0, 0, 0);
   return time.getTime() < yesterday.getTime();
 }
 
-function isBeforeToday(time: Date) {
+export function isBeforeToday(time: Date) {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   return time.getTime() < yesterday.getTime();
+}
+
+export function isYesterday(time: Date) {
+  return time.getDate() === new Date().getDate() - 1;
 }
 
 export function deservesStrike(lastPost: Date, lastStrike: Date): boolean {

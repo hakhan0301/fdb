@@ -23,7 +23,8 @@ async function POST_blog(req: NextApiRequest, res: NextApiResponse, session: Ses
   const { body }: { body: any } = req;
 
   try {
-    await addBlog(JSON.parse(body), session.user?.id as string);
+    // @ts-ignore
+    await addBlog(JSON.parse(body), session.user.id as string);
     return res.status(200).json({ error: false });
   } catch (e) {
     console.error(e);

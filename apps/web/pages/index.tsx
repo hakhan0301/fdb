@@ -7,7 +7,7 @@ import type { GetServerSideProps } from 'next';
 import { getSession, useSession } from 'next-auth/react';
 import NewPostField from "@fdb/ui/posts/NewPostField";
 import Post from "@fdb/ui/posts/Post";
-import { tryStrikeFetchedUser, tryStrikeUser } from "@fdb/db/models/users";
+import { tryStrikeFetchedUser } from "@fdb/db/models/users";
 
 const reloadSession = () => {
   const event = new Event("visibilitychange");
@@ -22,7 +22,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   // @ts-ignore next-auth is stupid and doesn't have a type for this
   const strikes = await tryStrikeFetchedUser(user?.name);
   // @ts-ignore
-  if (user.strikes >= 3 || strikes >= 3) {
+  if (user && (user.strikes >= 3 || strikes >= 3)) {
     return {
       redirect: {
         destination: '/banned',
