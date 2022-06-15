@@ -31,7 +31,7 @@ export default function StreakStrike({ strikes, streak }: { streak: number, stri
       <div className='flex justify-between text-3xl p-2'>
         <div className='flex items-center select-none'>
 
-          <Popup position="bottom center" trigger={
+          <Popup position="bottom center" on={['hover', 'click']} trigger={
             <button>
               <AiFillFire className='text-black w-8 h-8 fill-fuchsia-800 animate-pulse' />
             </button>} >
@@ -44,7 +44,7 @@ export default function StreakStrike({ strikes, streak }: { streak: number, stri
 
         <div className='flex gap-1 items-center select-none font-serif text-black'>
 
-          <Popup position="bottom center" trigger={
+          <Popup position="bottom center" on={['hover', 'click']} trigger={
             <button>
               <BsExclamationDiamond className='h-7 w-7 pr-1' />
             </button>} >
