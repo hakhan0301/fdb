@@ -93,7 +93,7 @@ export default function Post(props: any) {
             className="w-12 h-12 rounded-2xl shadow-md object-cover"
           />
           <div className="flex flex-col">
-            <h1 className="text-sm text-purple-800">{name}</h1>
+            <h1 className="text-sm text-black">{name}</h1>
             <h1 className="text-xs text-gray-600">{new Date(createdAt).toLocaleDateString()}</h1>
           </div>
         </div>
