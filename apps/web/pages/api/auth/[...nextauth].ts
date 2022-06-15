@@ -7,14 +7,7 @@ import { tryStrikeUser } from "@fdb/db/models/users";
 
 async function getUser(username: string, password: string) {
   let user = await prisma.user.findFirst({
-    where: { name: username },
-    include: {
-      blogs: {
-        select: { createdAt: true },
-        orderBy: { createdAt: "desc" },
-        take: 1,
-      }
-    }
+    where: { name: username }
   });
 
   if (!user) return null;
@@ -22,8 +15,7 @@ async function getUser(username: string, password: string) {
   const passwordsMatch = await compare(password as string, user?.password);
   if (!passwordsMatch) return null;
 
-  const lastPost = user.blogs[0]?.createdAt;
-  user.strikes = await tryStrikeUser({ ...user, username, lastPost });
+  user.strikes = await tryStrikeUser({ ...user, username });
 
   return user;
 }
@@ -49,7 +41,7 @@ export default NextAuth({
           image: user.image,
           streak: user.streaks,
           strikes: user.strikes,
-          lastPost: user.blogs[0]?.createdAt?.toString()
+          lastPost: user.lastPost
         };
       },
     }),

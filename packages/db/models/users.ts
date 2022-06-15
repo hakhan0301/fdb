@@ -42,31 +42,11 @@ export async function tryStrikeUser({ username, strikes, lastPost, lastStrike }:
 
 
 export async function tryStrikeFetchedUser(username: string) {
-
-
   const user = await prisma.user.findFirst({
-    where: { name: username },
-    include: {
-      blogs: {
-        select: { createdAt: true },
-        orderBy: { createdAt: "desc" },
-        take: 1,
-      }
-    }
+    where: { name: username }
   });
+
   if (!user) return 0;
 
-  const lastPost = user.blogs[0]?.createdAt;
-  if (deservesStrike(lastPost, user.lastStrike)) {
-    await prisma.user.update({
-      where: { name: username },
-      data: {
-        lastStrike: new Date(),
-        strikes: { increment: 1 },
-      }
-    });
-    return user.strikes + 1;
-  }
-
-  return user.strikes;
+  return await tryStrikeUser({ ...user, username });
 }
