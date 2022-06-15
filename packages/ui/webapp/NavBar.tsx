@@ -2,14 +2,18 @@ import { useState } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { GiSettingsKnobs, GiChalkOutlineMurder } from "react-icons/gi";
 import Link from 'next/link';
-import { useUser } from "../../../apps/web/lib/authHelpers";
+import { useSession } from "next-auth/react";
+
 import { signOut } from "next-auth/react";
+import { useRedirect } from "../lib/authHelpers";
 
 export default function NavBar() {
   const [menuHidden, setMenuHidden] = useState(true);
 
   const toggleMenu = () => setMenuHidden(!menuHidden);
-  const user = useUser();
+  const session = useSession();
+
+  useRedirect({ session });
 
   return (
     <div>
@@ -21,7 +25,7 @@ export default function NavBar() {
           <div className="flex flex-row gap-3 items-center">
             <Link href="/test"><div className="text-sm cursor-pointer">dev</div></Link>
 
-            {user
+            {session.data?.user
               ? <div className="cursor-pointer select-none" onClick={toggleMenu}><GiHamburgerMenu /></div>
               : <></>
             }
