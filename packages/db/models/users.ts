@@ -52,5 +52,6 @@ export async function tryStrikeFetchedUser(username: string) {
 
   if (!user) return 0;
 
-  return await tryStrikeUser({ ...user, username });
+  await tryStrikeUser({ ...user, username });
+  return user;
 }

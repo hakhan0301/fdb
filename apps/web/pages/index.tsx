@@ -20,9 +20,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const user = session?.user;
 
   // @ts-ignore next-auth is stupid and doesn't have a type for this
-  const strikes = await tryStrikeFetchedUser(user?.name);
+  const newUser = await tryStrikeFetchedUser(user?.name);
   // @ts-ignore
-  if (user && (user.strikes >= 3 || strikes >= 3)) {
+  if (user && (user.strikes >= 3 || newUser.strikes >= 3)) {
     return {
       redirect: {
         destination: '/banned',
@@ -35,9 +35,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       blogPosts: await getBlogs(session?.user?.email),
       // @ts-ignore
-      userStrikes: strikes || 0,
+      userStrikes: newUser?.strikes || 0,
       // @ts-ignore
-      userStreaks: user?.streaks || 0,
+      userStreaks: newUser?.streaks || user?.streaks || 0,
     }
   }
 }
