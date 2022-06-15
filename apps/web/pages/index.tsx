@@ -59,8 +59,8 @@ export default function Home({ blogPosts, userStrikes, userStreaks }: any) {
               onClick={() => setFormShown(!formShown)}>
               <div className='flex flex-row items-center px-2 gap-2 py-2 w-fit'>
                 <button
-                  className='text-2xl cursor-pointer group-hover:text-rose-500'>
-                  {formShown ? <BsChevronDown /> : <BsChevronUp />}
+                  className='text-2xl cursor-pointer group-hover:text-yellow-500'>
+                  {formShown ? <BsChevronUp /> : <BsChevronDown />}
                 </button>
                 <span className='select-none'>New Post</span>
               </div>
