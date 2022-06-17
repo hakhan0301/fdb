@@ -10,10 +10,7 @@ import { tryStrikeFetchedUser, updateStreaks } from "@fdb/db/models/users";
 import StreakStrike from "@fdb/ui/posts/StreakStrike";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  console.log('bruhhhhhhhhhhhhhhhhhhh');
-
   const session = await getSession(context);
-
   const user = session?.user;
 
   let newUser;

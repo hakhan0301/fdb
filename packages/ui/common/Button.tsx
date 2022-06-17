@@ -21,6 +21,7 @@ export function BaseButton(props: AriaButtonProps<"button"> & { className?: stri
 
   return (
     <button {...buttonProps} ref={ref} type="button"
+      aria-label='sussy button'
       className={`${props.className} text-white border-0 outline-none
         bg-gradient-to-b from-emerald-400 to-cyan-400
         disabled:from-slate-400 disabled:to-slate-500

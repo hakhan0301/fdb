@@ -21,6 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 async function POST_blog_comment(req: NextApiRequest, res: NextApiResponse, session: Session) {
   const comment = req.body;
   const blogId = parseInt(req.query.blogId as string, 10);
+  // @ts-ignore
   const id = session.user?.id as string;
 
   try {
