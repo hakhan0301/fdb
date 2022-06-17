@@ -1,8 +1,11 @@
+const withPlugins = require('next-compose-plugins');
+
 const withTM = require("next-transpile-modules")([
   "@fdb/ui",
   "@fdb/db"
 ]);
 
-module.exports = withTM({
-  reactStrictMode: true,
-});
+module.exports = withPlugins([
+  withTM({ reactStrictMode: true, }),
+
+]);
