@@ -1,23 +1,23 @@
 import { prisma } from "..";
 
-export function isBeforeYesterdayMorning(time: Date) {
+function isBeforeYesterdayMorning(time: Date) {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   yesterday.setHours(0, 0, 0, 0);
   return time.getTime() < yesterday.getTime();
 }
 
-export function isBeforeToday(time: Date) {
+function isBeforeToday(time: Date) {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   return time.getTime() < yesterday.getTime();
 }
 
-export function isYesterday(time: Date) {
+function isYesterday(time: Date) {
   return time.getDate() === new Date().getDate() - 1;
 }
 
-export function deservesStrike(lastPost: Date, lastStrike: Date): boolean {
+function deservesStrike(lastPost: Date, lastStrike: Date): boolean {
   if (!lastPost) return false;
   return isBeforeYesterdayMorning(lastPost) && isBeforeToday(lastStrike);
 }
@@ -38,20 +38,47 @@ export async function tryStrikeUser({ username, strikes, lastPost, lastStrike }:
         strikes: { increment: 1 },
       }
     });
-    return strikes + 1;
+    return true;
   }
 
-  return strikes;
+  return false;
 }
 
 
 export async function tryStrikeFetchedUser(username: string) {
-  const user = await prisma.user.findFirst({
+  let user = await prisma.user.findFirst({
     where: { name: username }
   });
 
-  if (!user) return 0;
+  if (!user) return null;
 
-  await tryStrikeUser({ ...user, username });
+  const striked = await tryStrikeUser({ ...user, username });
+  if (striked) {
+    user.strikes++;
+  }
+
   return user;
+}
+
+export async function updateStreaks(
+  { id, lastPost }: { id: string, lastPost: Date },
+  { userPosted = false }: { userPosted?: boolean } = {}
+) {
+  if (isYesterday(lastPost)) {
+    if (userPosted) {
+      await prisma.user.update({
+        where: { id },
+        data: { lastPost: new Date(), streaks: { increment: 1 } }
+      });
+    }
+  } else if (isBeforeYesterdayMorning(lastPost)) {
+    await prisma.user.update({
+      where: { id },
+      data: {
+        lastPost: new Date(), streaks: {
+          set: userPosted ? 1 : 0
+        }
+      }
+    });
+  }
 }

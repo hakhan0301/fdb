@@ -1,6 +1,6 @@
 import { prisma } from '../index';
 import type { PostContent } from './types';
-import { isYesterday, isBeforeYesterdayMorning } from './users';
+import { updateStreaks } from './users';
 
 export async function getBlogs(userId: string | undefined | null = '') {
   const blogPost = await prisma.blogPost.findMany({
@@ -47,7 +47,6 @@ export async function getBlogs(userId: string | undefined | null = '') {
 }
 
 export async function addBlog(content: PostContent, id: string) {
-
   const [user, postSuccess] = await Promise.all([
     await prisma.user.findFirst({
       where: { id }
@@ -64,26 +63,7 @@ export async function addBlog(content: PostContent, id: string) {
   if (!user) throw new Error('User not found');
   if (!postSuccess) throw new Error('Post failed');
 
-  const { lastPost } = user;
-
-  console.log(
-    lastPost,
-    isYesterday(lastPost),
-    isBeforeYesterdayMorning(lastPost)
-  );
-
-
-  if (isYesterday(lastPost)) {
-    await prisma.user.update({
-      where: { id },
-      data: { lastPost: new Date(), streaks: { increment: 1 } }
-    });
-  } else if (isBeforeYesterdayMorning(lastPost)) {
-    await prisma.user.update({
-      where: { id },
-      data: { lastPost: new Date(), streaks: { set: 1 } }
-    });
-  }
+  await updateStreaks({ ...user }, { userPosted: true });
 }
 
 export async function likeBlog(blogId: number, userId: string) {

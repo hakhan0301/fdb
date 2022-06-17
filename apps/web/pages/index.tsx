@@ -6,16 +6,23 @@ import type { GetServerSideProps } from 'next';
 import { getSession, useSession } from 'next-auth/react';
 import NewPostField from "@fdb/ui/posts/NewPostField";
 import Post from "@fdb/ui/posts/Post";
-import { tryStrikeFetchedUser } from "@fdb/db/models/users";
+import { tryStrikeFetchedUser, updateStreaks } from "@fdb/db/models/users";
 import StreakStrike from "@fdb/ui/posts/StreakStrike";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
+  console.log('bruhhhhhhhhhhhhhhhhhhh');
+
   const session = await getSession(context);
 
   const user = session?.user;
 
-  // @ts-ignore next-auth is stupid and doesn't have a type for this
-  const newUser = await tryStrikeFetchedUser(user?.name);
+  let newUser;
+  if (user) {
+    newUser = await tryStrikeFetchedUser(user.name as string);
+    // @ts-ignore next-auth is stupid and doesn't have a type for this
+    await updateStreaks({ ...newUser });
+  }
+
   // @ts-ignore
   if (user && (user.strikes >= 3 || newUser.strikes >= 3)) {
     return {
@@ -31,7 +38,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
       // @ts-ignore
       blogPosts: await getBlogs(session?.user?.id),
       // @ts-ignore
-      userStrikes: newUser?.strikes || 0,
+      userStrikes: newUser?.strikes || user?.strikes || 0,
       // @ts-ignore
       userStreaks: newUser?.streaks || user?.streaks || 0,
     }
