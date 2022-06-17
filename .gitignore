@@ -34,3 +34,7 @@ yarn-error.log*
 
 *.db
 *.env
+apps/web/public/sw.js
+apps/web/public/sw.js.map
+apps/web/public/workbox-d4a15e01.js
+apps/web/public/workbox-d4a15e01.js.map
