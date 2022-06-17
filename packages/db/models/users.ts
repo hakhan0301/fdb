@@ -60,25 +60,45 @@ export async function tryStrikeFetchedUser(username: string) {
   return user;
 }
 
+export function streakLogic(lastPost: Date) {
+  if (isYesterday(lastPost)) {
+    return 'increment';
+  } else if (isBeforeYesterdayMorning(lastPost)) {
+    return 'reset';
+  }
+
+  return 'none';
+}
+
 export async function updateStreaks(
   { id, lastPost }: { id: string, lastPost: Date },
   { userPosted = false }: { userPosted?: boolean } = {}
 ) {
-  if (isYesterday(lastPost)) {
-    if (userPosted) {
-      await prisma.user.update({
+  switch (streakLogic(lastPost)) {
+    case 'increment': {
+      const { streaks } = await prisma.user.update({
         where: { id },
-        data: { lastPost: new Date(), streaks: { increment: 1 } }
+        data: {
+          lastPost: new Date(),
+          streaks: { increment: userPosted ? 1 : 0 }
+        },
+        select: { streaks: true }
+      });
+
+      return streaks;
+    }
+    case 'reset': {
+      const { streaks } = await prisma.user.update({
+        where: { id },
+        data: {
+          lastPost: new Date(), streaks: {
+            set: userPosted ? 1 : 0
+          }
+        },
+        select: { streaks: true }
       });
     }
-  } else if (isBeforeYesterdayMorning(lastPost)) {
-    await prisma.user.update({
-      where: { id },
-      data: {
-        lastPost: new Date(), streaks: {
-          set: userPosted ? 1 : 0
-        }
-      }
-    });
   }
+
+  return 0;
 }
