@@ -37,7 +37,8 @@
     "react-modal-image-responsive": "^1.1.1",
     "reactjs-popup": "^2.0.5",
     "uuid": "^8.3.2",
-    "valid-url": "^1.0.9"
+    "valid-url": "^1.0.9",
+    "web-push": "^3.5.0"
   },
   "devDependencies": {
     "@fdb/eslint": "*",
@@ -48,6 +49,7 @@
     "@types/react": "17.0.37",
     "@types/uuid": "^8.3.4",
     "@types/valid-url": "^1.0.3",
+    "@types/web-push": "^3.3.2",
     "autoprefixer": "^10.4.7",
     "eslint": "7.32.0",
     "next-transpile-modules": "9.0.0",
