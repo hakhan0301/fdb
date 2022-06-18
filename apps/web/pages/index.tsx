@@ -53,9 +53,9 @@ export default function Home({ blogPosts, userStrikes, userStreaks }: any) {
   const [strikes, setStrikes] = useState(userStrikes);
 
   async function du() {
-    if (await Notification.requestPermission() === 'granted') {
-      new Notification('susy baka');
-    }
+    const res = await fetch('/api/notifications/send/test');
+    console.log(await res.text());
+
   }
 
   return (
