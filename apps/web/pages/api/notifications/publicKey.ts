@@ -24,5 +24,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 }
 
 async function GET_vapidPublic(req: NextApiRequest, res: NextApiResponse, session: Session) {
-  return res.status(200).send(process.env.VAPID_PUBLIC_KEY);
+  return res.status(200).send(process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY);
 }
