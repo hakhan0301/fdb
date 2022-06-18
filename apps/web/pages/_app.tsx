@@ -49,7 +49,7 @@ function MyApp({
 
   const Header = () => (
     <Head>
-      <title>Foolar Daily Blog - FDB</title>
+      <title>Foolar DB - FDB</title>
       <meta name="description" content="FOOLARS ASSEMBLE" />
       <link rel="icon" href="/favicon.ico" />
       {headContent}
