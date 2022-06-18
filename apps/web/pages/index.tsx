@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { getBlogs } from '@fdb/db/models/blogs';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
 import type { GetServerSideProps } from 'next';
 import { getSession, useSession } from 'next-auth/react';
@@ -8,6 +8,7 @@ import NewPostField from "@fdb/ui/posts/NewPostField";
 import Post from "@fdb/ui/posts/Post";
 import { tryStrikeFetchedUser, updateStreaks } from "@fdb/db/models/users";
 import StreakStrike from "@fdb/ui/posts/StreakStrike";
+import Button from '@fdb/ui/common/Button';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
@@ -51,8 +52,15 @@ export default function Home({ blogPosts, userStrikes, userStreaks }: any) {
   const [streak, setStreak] = useState(userStreaks);
   const [strikes, setStrikes] = useState(userStrikes);
 
+  async function du() {
+    if (await Notification.requestPermission() === 'granted') {
+      new Notification('susy baka');
+    }
+  }
+
   return (
     <div className='flex-grow'>
+      <Button onPress={du}>click me</Button>
       <div className="mx-auto max-w-xl">
         <div className="flex flex-col">
 

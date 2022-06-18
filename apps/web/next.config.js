@@ -2,7 +2,8 @@ const withPlugins = require('next-compose-plugins');
 
 const withTM = require("next-transpile-modules")([
   "@fdb/ui",
-  "@fdb/db"
+  "@fdb/db",
+  '@fdb/notifications',
 ]);
 const withPWA = require('next-pwa');
 
