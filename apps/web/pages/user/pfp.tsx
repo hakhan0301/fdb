@@ -2,9 +2,13 @@ import ImageDragArea from "@fdb/ui/common/ImageDragArea";
 import Button from "@fdb/ui/common/Button";
 import { useState } from "react";
 import { useRouter } from "next/router";
+import { subscribe } from "@fdb/notifications";
+import { useSession } from "next-auth/react";
 
 export default function PFP() {
   const router = useRouter();
+  const session = useSession();
+
   const [submitting, setSubmitting] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
 
@@ -22,13 +26,14 @@ export default function PFP() {
       body: imageFile
     });
 
-    const pfpres = await fetch('/api/user/pfp', {
+    await fetch('/api/user/pfp', {
       method: 'POST',
       body: JSON.stringify({ url: imageUploadURL.split('?')[0] })
     });
 
-    console.log(await pfpres.text());
 
+    // @ts-ignore
+    subscribe(session?.data?.user?.id);
 
     setImageFile(null);
     setSubmitting(false);

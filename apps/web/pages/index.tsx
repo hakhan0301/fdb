@@ -43,8 +43,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 }
 
-
-
 export default function Home({ blogPosts, userStrikes, userStreaks }: any) {
   const session = useSession();
   const [formShown, setFormShown] = useState(false);

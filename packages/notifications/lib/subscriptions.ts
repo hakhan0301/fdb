@@ -31,7 +31,6 @@ async function getSubscription(registration: ServiceWorkerRegistration) {
 }
 
 export async function subscribe(userId: string) {
-  console.log('subscribe', userId);
   await Notification.requestPermission();
   const registration = await navigator.serviceWorker.ready;
   const subscription = await getSubscription(registration);
