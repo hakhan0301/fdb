@@ -22,7 +22,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   // @ts-ignore
-  if (user && (user.strikes >= 3 || newUser.strikes >= 3)) {
+  if ((user && user.strikes >= 3) || (newUser && newUser.strikes >= 3)) {
     return {
       redirect: {
         destination: '/banned',
