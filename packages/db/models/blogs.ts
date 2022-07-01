@@ -1,6 +1,6 @@
 import { prisma } from '../index';
 import type { PostContent } from './types';
-import { updateStreaks } from './users';
+import { tryIncrementStreaks } from './users';
 
 export async function getBlogs(userId: string | undefined | null = '') {
   const blogPost = await prisma.blogPost.findMany({
@@ -63,7 +63,7 @@ export async function addBlog(content: PostContent, id: string) {
   if (!user) throw new Error('User not found');
   if (!postSuccess) throw new Error('Post failed');
 
-  await updateStreaks({ ...user }, { userPosted: true });
+  await tryIncrementStreaks({ ...user });
 }
 
 export async function likeBlog(blogId: number, userId: string) {

@@ -6,23 +6,43 @@ import type { GetServerSideProps } from 'next';
 import { getSession, useSession } from 'next-auth/react';
 import NewPostField from "@fdb/ui/posts/NewPostField";
 import Post from "@fdb/ui/posts/Post";
-import { tryStrikeFetchedUser, updateStreaks } from "@fdb/db/models/users";
+import { tryResetStreaks, tryStrikeFetchedUser, tryStrikeUser } from "@fdb/db/models/users";
 import StreakStrike from "@fdb/ui/posts/StreakStrike";
 import Button from '@fdb/ui/common/Button';
+import { User } from '@fdb/db/types';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const session = await getSession(context);
-  const user = session?.user;
+  const user = session?.user as User;
 
-  let newUser;
-  if (user) {
-    newUser = await tryStrikeFetchedUser(user.name as string);
-    // @ts-ignore next-auth is stupid and doesn't have a type for this
-    await updateStreaks({ ...newUser });
+  if (!user) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      }
+    }
   }
 
+  console.log(user);
+
+
+  // next js funky wierdness
+  user.lastPost = new Date(user.lastPost as unknown as string);
+  user.lastStrike = new Date(user.lastStrike as unknown as string);
+
+  const isUserStriked = await tryStrikeUser({ ...user });
+  user.strikes += isUserStriked ? 1 : 0;
+
+  const isStreaksReset = await tryResetStreaks({ ...user });
+  user.streaks = isStreaksReset ? 1 : user.streaks;
+
+  console.log(user);
+
+
+
   // @ts-ignore
-  if ((user && user.strikes >= 3) || (newUser && newUser.strikes >= 3)) {
+  if (user.strikes >= 3) {
     return {
       redirect: {
         destination: '/banned',
@@ -35,10 +55,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       // @ts-ignore
       blogPosts: await getBlogs(session?.user?.id),
-      // @ts-ignore
-      userStrikes: newUser?.strikes || user?.strikes || 0,
-      // @ts-ignore
-      userStreaks: newUser?.streaks || user?.streaks || 0,
+      userStrikes: user.strikes,
+      userStreaks: user.streaks
     }
   }
 }
@@ -53,7 +71,6 @@ export default function Home({ blogPosts, userStrikes, userStreaks }: any) {
   async function du() {
     const res = await fetch('/api/notifications/send/test');
     console.log(await res.text());
-
   }
 
   return (

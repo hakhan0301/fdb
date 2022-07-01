@@ -15,7 +15,7 @@ async function getUser(username: string, password: string) {
   const passwordsMatch = await compare(password as string, user?.password);
   if (!passwordsMatch) return null;
 
-  const striked = await tryStrikeUser({ ...user, username });
+  const striked = await tryStrikeUser({ ...user });
   if (striked)
     user.strikes++;
 
@@ -41,7 +41,7 @@ export default NextAuth({
           id: user.id,
           name: user.name,
           image: user.image,
-          streak: user.streaks,
+          streaks: user.streaks,
           strikes: user.strikes,
           lastPost: user.lastPost
         };

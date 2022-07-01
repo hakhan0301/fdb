@@ -32,7 +32,7 @@ model User {
   comments   Comment[]
 
   // streaks & bans
-  streaks    Int      @default(1)
+  streak    Int      @default(1)
   strikes    Int      @default(0)
   lastPost   DateTime @default(now())
   lastStrike DateTime @default(now())

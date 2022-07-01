@@ -1,3 +1,4 @@
+import { User } from "@prisma/client";
 import { prisma } from "..";
 
 function isBeforeYesterdayMorning(time: Date) {
@@ -22,17 +23,10 @@ function deservesStrike(lastPost: Date, lastStrike: Date): boolean {
   return isBeforeYesterdayMorning(lastPost) && isBeforeToday(lastStrike);
 }
 
-interface User {
-  username: string;
-  strikes: number;
-  lastPost: Date;
-  lastStrike: Date;
-}
-
-export async function tryStrikeUser({ username, strikes, lastPost, lastStrike }: User) {
+export async function tryStrikeUser({ name, lastPost, lastStrike }: User) {
   if (deservesStrike(lastPost, lastStrike)) {
     await prisma.user.update({
-      where: { name: username },
+      where: { name },
       data: {
         lastStrike: new Date(),
         strikes: { increment: 1 },
@@ -45,14 +39,14 @@ export async function tryStrikeUser({ username, strikes, lastPost, lastStrike }:
 }
 
 
-export async function tryStrikeFetchedUser(username: string) {
+export async function tryStrikeFetchedUser(name: string) {
   let user = await prisma.user.findFirst({
-    where: { name: username }
+    where: { name: name }
   });
 
   if (!user) return null;
 
-  const striked = await tryStrikeUser({ ...user, username });
+  const striked = await tryStrikeUser({ ...user, name });
   if (striked) {
     user.strikes++;
   }
@@ -70,35 +64,40 @@ export function streakLogic(lastPost: Date) {
   return 'none';
 }
 
-export async function updateStreaks(
-  { id, lastPost }: { id: string, lastPost: Date },
-  { userPosted = false }: { userPosted?: boolean } = {}
+export async function tryResetStreaks(
+  { name, lastPost }: { name: string, lastPost: Date }
 ) {
-  switch (streakLogic(lastPost)) {
-    case 'increment': {
-      const { streaks } = await prisma.user.update({
-        where: { id },
-        data: {
-          lastPost: new Date(),
-          streaks: { increment: userPosted ? 1 : 0 }
-        },
-        select: { streaks: true }
-      });
-
-      return streaks;
-    }
-    case 'reset': {
-      const { streaks } = await prisma.user.update({
-        where: { id },
-        data: {
-          lastPost: new Date(), streaks: {
-            set: userPosted ? 1 : 0
-          }
-        },
-        select: { streaks: true }
-      });
-    }
+  if (!isBeforeYesterdayMorning(lastPost)) {
+    return false;
   }
 
-  return 0;
+  await prisma.user.update({
+    where: { name },
+    data: {
+      lastPost: new Date(),
+      streaks: { set: 0 }
+    }
+  });
+
+  return true;
+}
+
+
+export async function tryIncrementStreaks(
+  { id, lastPost }: { id: string, lastPost: Date }
+) {
+  if (!isYesterday(lastPost)) {
+    return false;
+  }
+
+  const { streaks } = await prisma.user.update({
+    where: { id },
+    data: {
+      lastPost: new Date(),
+      streaks: { increment: 1 }
+    },
+    select: { streaks: true }
+  });
+
+  return streaks;
 }
