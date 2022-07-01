@@ -20,8 +20,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         return res.status(404).json('Route not found.');
     }
   } catch (e) {
-    // console.trace();
-    // console.error(e.stack);
+    console.error(e);
 
     return res.status(500).json({ error: 'Internal Server Error.' });
   }
