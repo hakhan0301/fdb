@@ -33,11 +33,11 @@ async function POST_blog(req: NextApiRequest, res: NextApiResponse, session: Ses
   user.lastPost = new Date(user.lastPost);
   user.lastStrike = new Date(user.lastStrike);
 
+  const newPost = await addBlog(JSON.parse(body), user.id!);
   await Promise.all([
-    await addBlog(JSON.parse(body), user.id!),
     await tryStrikeUser({ ...user }),
     await tryResetStreaks({ ...user }),
   ]);
 
-  return res.status(200).json({ error: false });
+  return res.status(200).json(newPost);
 }

@@ -64,6 +64,8 @@ export async function addBlog(content: PostContent, id: string) {
   if (!postSuccess) throw new Error('Post failed');
 
   await tryIncrementStreaks({ ...user });
+
+  return postSuccess;
 }
 
 export async function likeBlog(blogId: number, userId: string) {
