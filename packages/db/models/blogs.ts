@@ -1,7 +1,35 @@
 import { prisma } from '../index';
 import type { PostContent } from './types';
 
-export async function getBlogs(userId: string | undefined | null = '') {
+export type Post = {
+  totalLikes: number;
+  likedByUser: boolean;
+  createdAt: string;
+  comments: {
+    createdAt: string;
+    text: string;
+    author: {
+      name: string;
+    };
+  }[];
+  id: number;
+  type: string;
+  text: string;
+  userId: string;
+  likes: {
+    name: string;
+  }[];
+  author: {
+    name: string;
+    image: string;
+  };
+  _count: {
+    likes: number;
+  };
+}
+
+export async function getBlogs(userId: string | undefined | null = '')
+  : Promise<Post[]> {
   const blogPost = await prisma.blogPost.findMany({
     take: 10,
     orderBy: {
@@ -58,6 +86,22 @@ export async function addBlog(content: PostContent, id: string) {
         type: content.type,
         text: JSON.stringify(content.body),
         author: { connect: { id } }
+      },
+      include: {
+        author: { select: { name: true, image: true } },
+        comments: {
+          select: {
+            createdAt: true,
+            text: true,
+            author: { select: { name: true } }
+          },
+          orderBy: { createdAt: 'asc' }
+        },
+        likes: {
+          select: { name: true },
+          where: { id: id || '' } // is the post liked by the logged in user
+        },
+        _count: { select: { likes: true } }
       }
     })
   ]);

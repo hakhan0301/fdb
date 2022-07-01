@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     switch (method) {
-      case 'POST':
+      case 'GET':
         const session = await getSession({ req })
         if (!session)
           return res.status(401).json('Not Authorized');
@@ -30,8 +30,8 @@ async function GET_streakStrike(req: NextApiRequest, res: NextApiResponse, sessi
   const user = await prisma.user.findFirst({
     where: { id },
     select: {
-      lastPost: true,
-      lastStrike: true
+      streaks: true,
+      strikes: true
     }
   });
 

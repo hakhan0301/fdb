@@ -5,9 +5,10 @@ import { useState } from "react";
 
 import { isValidTitle } from "../helpers";
 import ImageDragArea from "../../common/ImageDragArea";
+import { ContentFieldProps } from "../NewPostField";
 
 
-export default function ImageContentField({ }: any) {
+export default function ImageContentField({ onSubmit }: ContentFieldProps) {
   const router = useRouter();
 
   const [title, setTitle] = useState('');
@@ -30,7 +31,7 @@ export default function ImageContentField({ }: any) {
     });
 
 
-    await fetch('/api/blogs', {
+    const postRes = await fetch('/api/blogs', {
       method: 'POST',
       body: JSON.stringify({
         type: 'image', body: { title, url: imageUploadURL.split('?')[0] }
@@ -39,6 +40,7 @@ export default function ImageContentField({ }: any) {
 
     setTitle('');
     setImageFile(null);
+    onSubmit(await postRes.json());
     setSubmitting(false);
     router.push('/');
   };

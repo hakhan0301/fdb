@@ -45,8 +45,6 @@ export async function tryStrikeUser({ name, lastPost, lastStrike }: User) {
 export async function tryResetStreaks(
   { name, lastPost }: { name: string, lastPost: Date }
 ) {
-  console.log('isBeforeYesterdayMorning', isBeforeYesterdayMorning(lastPost));
-
   if (!isBeforeYesterdayMorning(lastPost)) {
     return false;
   }
@@ -66,9 +64,6 @@ export async function tryResetStreaks(
 export async function tryIncrementStreaks(
   { id, lastPost }: { id: string, lastPost: Date }
 ) {
-  console.log(lastPost, isYesterday(lastPost));
-
-
   if (!isYesterday(lastPost)) {
     return false;
   }

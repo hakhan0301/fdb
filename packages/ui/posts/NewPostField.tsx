@@ -2,29 +2,41 @@ import TextArea from "@fdb/ui/common/TextArea";
 import TextField from "@fdb/ui/common/TextField";
 import Button from "@fdb/ui/common/Button";
 import { useRouter } from 'next/router';
-import { useRef, useState } from "react";
+import { useContext, useState } from "react";
 import { Tabs, TabItem } from "../common/Tabs";
-
 import { isWebUri } from 'valid-url';
 
 import { isValidTitle } from "./helpers";
 import ImageContentField from './content-fields/ImageContentField';
 
+import appContext from '../contexts/appContext';
+import { Post } from "@fdb/db/models/blogs";
 
 export default function NewPostField({ }: any) {
+  const app = useContext(appContext);
+
+  const onSubmit = async (post: Post) => {
+    app.addPost(post);
+    await app.resetStreakStrikes();
+  };
+
   return (
     <div className='bg-emerald-100 p-4'>
       <Tabs >
-        <TabItem title="Image"><ImageContentField /></TabItem>
-        <TabItem title="Text"><TextContentField /></TabItem>
-        <TabItem title="Link"><LinkContentField /></TabItem>
+        <TabItem title="Image"><ImageContentField onSubmit={onSubmit} /></TabItem>
+        <TabItem title="Text"><TextContentField onSubmit={onSubmit} /></TabItem>
+        <TabItem title="Link"><LinkContentField onSubmit={onSubmit} /></TabItem>
       </Tabs>
     </div>
   )
 }
 
+export type ContentFieldProps = {
+  onSubmit: (post: Post) => void
+}
 
-function TextContentField({ }: any) {
+
+function TextContentField({ onSubmit }: ContentFieldProps) {
   const router = useRouter();
 
   const [postValue, setPostValue] = useState('');
@@ -35,13 +47,14 @@ function TextContentField({ }: any) {
   const submitBlogPost = async () => {
     if (!isValidText) return;
     setSubmitting(true);
-    await fetch('/api/blogs', {
+    const postRes = await fetch('/api/blogs', {
       method: 'POST',
       body: JSON.stringify({
         type: 'text', body: postValue
       })
     });
     setPostValue('');
+    onSubmit(await postRes.json());
     setSubmitting(false);
     router.push('/');
   };
@@ -63,7 +76,7 @@ function TextContentField({ }: any) {
 }
 
 
-function LinkContentField({ }: any) {
+function LinkContentField({ onSubmit }: ContentFieldProps) {
   const router = useRouter();
 
   const [title, setTitle] = useState('');
@@ -76,7 +89,7 @@ function LinkContentField({ }: any) {
     if (!isValidURL || !isValidTitle(title)) return;
 
     setSubmitting(true);
-    await fetch('/api/blogs', {
+    const postRes = await fetch('/api/blogs', {
       method: 'POST',
       body: JSON.stringify({
         type: 'link', body: { title, url }
@@ -84,6 +97,7 @@ function LinkContentField({ }: any) {
     });
     setTitle('');
     setUrl('');
+    onSubmit(await postRes.json());
     setSubmitting(false);
     router.push('/');
   };
