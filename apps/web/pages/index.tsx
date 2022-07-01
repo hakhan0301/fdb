@@ -6,9 +6,8 @@ import type { GetServerSideProps } from 'next';
 import { getSession, useSession } from 'next-auth/react';
 import NewPostField from "@fdb/ui/posts/NewPostField";
 import Post from "@fdb/ui/posts/Post";
-import { tryResetStreaks, tryStrikeFetchedUser, tryStrikeUser } from "@fdb/db/models/users";
+import { tryResetStreaks, tryStrikeUser } from "@fdb/db/models/users";
 import StreakStrike from "@fdb/ui/posts/StreakStrike";
-import Button from '@fdb/ui/common/Button';
 import { User } from '@fdb/db/types';
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

@@ -4,7 +4,7 @@ import { getSession } from "next-auth/react";
 import type { NextApiRequest, NextApiResponse } from 'next';
 import type { Session } from 'next-auth';
 import { User } from '@fdb/db/types';
-import { tryResetStreaks, tryStrikeUser } from '@fdb/db/models/users';
+import { tryIncrementStreaks, tryResetStreaks, tryStrikeUser } from '@fdb/db/models/users';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -33,10 +33,14 @@ async function POST_blog(req: NextApiRequest, res: NextApiResponse, session: Ses
   user.lastPost = new Date(user.lastPost);
   user.lastStrike = new Date(user.lastStrike);
 
-  const newPost = await addBlog(JSON.parse(body), user.id!);
   await Promise.all([
     await tryStrikeUser({ ...user }),
     await tryResetStreaks({ ...user }),
+  ]);
+
+  const [newPost] = await Promise.all([
+    await addBlog(JSON.parse(body), user.id!),
+    await tryIncrementStreaks({ ...user }),
   ]);
 
   return res.status(200).json(newPost);

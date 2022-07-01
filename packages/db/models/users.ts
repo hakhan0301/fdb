@@ -15,7 +15,10 @@ function isBeforeToday(time: Date) {
 }
 
 function isYesterday(time: Date) {
-  return time.getDate() === new Date().getDate() - 1;
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  return time.getDate() === yesterday.getDate();
 }
 
 function deservesStrike(lastPost: Date, lastStrike: Date): boolean {
@@ -39,34 +42,11 @@ export async function tryStrikeUser({ name, lastPost, lastStrike }: User) {
 }
 
 
-export async function tryStrikeFetchedUser(name: string) {
-  let user = await prisma.user.findFirst({
-    where: { name: name }
-  });
-
-  if (!user) return null;
-
-  const striked = await tryStrikeUser({ ...user, name });
-  if (striked) {
-    user.strikes++;
-  }
-
-  return user;
-}
-
-export function streakLogic(lastPost: Date) {
-  if (isYesterday(lastPost)) {
-    return 'increment';
-  } else if (isBeforeYesterdayMorning(lastPost)) {
-    return 'reset';
-  }
-
-  return 'none';
-}
-
 export async function tryResetStreaks(
   { name, lastPost }: { name: string, lastPost: Date }
 ) {
+  console.log('isBeforeYesterdayMorning', isBeforeYesterdayMorning(lastPost));
+
   if (!isBeforeYesterdayMorning(lastPost)) {
     return false;
   }
@@ -86,6 +66,9 @@ export async function tryResetStreaks(
 export async function tryIncrementStreaks(
   { id, lastPost }: { id: string, lastPost: Date }
 ) {
+  console.log(lastPost, isYesterday(lastPost));
+
+
   if (!isYesterday(lastPost)) {
     return false;
   }
@@ -93,7 +76,6 @@ export async function tryIncrementStreaks(
   const { streaks } = await prisma.user.update({
     where: { id },
     data: {
-      lastPost: new Date(),
       streaks: { increment: 1 }
     },
     select: { streaks: true }

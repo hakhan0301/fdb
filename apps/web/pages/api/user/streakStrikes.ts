@@ -25,10 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 }
 
 async function GET_streakStrike(req: NextApiRequest, res: NextApiResponse, session: Session) {
-  const { url } = JSON.parse(req.body);
   const { id } = session.user as any;
-
-  console.log(url);
 
   const user = await prisma.user.findFirst({
     where: { id },

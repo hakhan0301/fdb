@@ -48,8 +48,11 @@ export async function getBlogs(userId: string | undefined | null = '') {
 
 export async function addBlog(content: PostContent, id: string) {
   const [user, postSuccess] = await Promise.all([
-    await prisma.user.findFirst({
-      where: { id }
+    await prisma.user.update({
+      where: { id },
+      data: {
+        lastPost: new Date()
+      }
     }),
     await prisma.blogPost.create({
       data: {
@@ -62,8 +65,6 @@ export async function addBlog(content: PostContent, id: string) {
 
   if (!user) throw new Error('User not found');
   if (!postSuccess) throw new Error('Post failed');
-
-  await tryIncrementStreaks({ ...user });
 
   return postSuccess;
 }
