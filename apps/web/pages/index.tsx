@@ -6,7 +6,7 @@ import type { GetServerSideProps } from 'next';
 import { getSession, useSession } from 'next-auth/react';
 import NewPostField from "@fdb/ui/posts/NewPostField";
 import Post from "@fdb/ui/posts/Post";
-import { tryStrikeFetchedUser, tryStrikeUser } from "@fdb/db/models/users";
+import { tryStrikeFetchedUser } from "@fdb/db/models/users";
 import StreakStrike from "@fdb/ui/posts/StreakStrike";
 import { User } from '@fdb/db/types';
 
@@ -25,12 +25,12 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
-  const isUserStriked = await tryStrikeFetchedUser(user.name);
-  user.strikes += isUserStriked ? 1 : 0;
-  user.streaks = isUserStriked ? 1 : user.streaks;
+  const strikedUser = await tryStrikeFetchedUser(user.name);
+  user.strikes += strikedUser ? 1 : 0;
+  user.streaks = strikedUser ? 1 : user.streaks;
 
   // @ts-ignore
-  if (user.strikes >= 3) {
+  if (strikedUser.strikes >= 3) {
     return {
       redirect: {
         destination: '/banned',
