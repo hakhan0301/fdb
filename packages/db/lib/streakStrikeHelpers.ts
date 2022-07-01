@@ -42,6 +42,5 @@ export function timeWhenStrike(lastPost: Date, lastStrike: Date) {
 
 export function deservesStrike(lastPost: Date, lastStrike: Date): boolean {
   const userStrikeTime = timeWhenStrike(lastPost, lastStrike);
-
   return userStrikeTime.getTime() <= new Date().getTime();
 }
