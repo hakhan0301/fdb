@@ -61,42 +61,33 @@ export default function Home({ blogPosts, userStrikes, userStreaks }: any) {
   const [streak, setStreak] = useState(userStreaks);
   const [strikes, setStrikes] = useState(userStrikes);
 
-  async function du() {
-    const res = await fetch('/api/notifications/send/test');
-    console.log(await res.text());
-  }
-
   return (
     <div className='flex-grow'>
-      <Button onPress={du}>click me</Button>
-      <div className="mx-auto max-w-xl">
+      <div className="mx-auto max-w-xl flex flex-col">
+        <StreakStrike streak={streak} strikes={strikes} />
+
         <div className="flex flex-col">
+          <div className='bg-gradient-to-r from-green-400 to-blue-500 text-white group cursor-pointer'
 
-          <StreakStrike streak={streak} strikes={strikes} />
-
-          <div className="flex flex-col">
-            <div className='bg-gradient-to-r from-green-400 to-blue-500 text-white group cursor-pointer'
-
-              onClick={() => setFormShown(!formShown)}>
-              <div className='flex flex-row items-center px-2 gap-2 py-2 w-fit'>
-                <button
-                  className='text-2xl cursor-pointer group-hover:text-yellow-500'>
-                  {formShown ? <BsChevronUp /> : <BsChevronDown />}
-                </button>
-                <span className='select-none'>New Post</span>
-              </div>
+            onClick={() => setFormShown(!formShown)}>
+            <div className='flex flex-row items-center px-2 gap-2 py-2 w-fit'>
+              <button
+                className='text-2xl cursor-pointer group-hover:text-yellow-500'>
+                {formShown ? <BsChevronUp /> : <BsChevronDown />}
+              </button>
+              <span className='select-none'>New Post</span>
             </div>
-            {formShown && <NewPostField />}
           </div>
+          {formShown && <NewPostField />}
+        </div>
 
 
-          <div className='flex flex-col gap-4'>
-            {blogPosts.map((blogPost: any, index: number) => <Post
-              key={JSON.stringify(blogPost)}
-              {...blogPost} index={index}
-              sessionUser={session?.data?.user}
-            />)}
-          </div>
+        <div className='flex flex-col gap-4'>
+          {blogPosts.map((blogPost: any, index: number) => <Post
+            key={JSON.stringify(blogPost)}
+            {...blogPost} index={index}
+            sessionUser={session?.data?.user}
+          />)}
         </div>
       </div>
     </div>
