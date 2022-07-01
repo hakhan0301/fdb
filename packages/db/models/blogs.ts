@@ -109,7 +109,22 @@ export async function addBlog(content: PostContent, id: string) {
   if (!user) throw new Error('User not found');
   if (!postSuccess) throw new Error('Post failed');
 
-  return postSuccess;
+  const formattedFields = {
+    totalLikes: postSuccess._count.likes,
+    likedByUser: postSuccess.likes.length > 0,
+    createdAt: postSuccess.createdAt.toString(),
+    comments: postSuccess.comments.map((comment) => ({
+      ...comment,
+      createdAt: comment.createdAt.toString(),
+    })),
+  };
+
+  const out = {
+    ...postSuccess,
+    ...formattedFields
+  };
+
+  return out;
 }
 
 export async function likeBlog(blogId: number, userId: string) {

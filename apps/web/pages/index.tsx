@@ -43,8 +43,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       blogPosts: await getBlogs(user.id),
       userStrikes: user.strikes,
-      userStreaks: user.streaks,
-      isUserStriked
+      userStreaks: user.streaks
     }
   }
 }
@@ -61,7 +60,7 @@ const getStreakStrikes = async () => {
   return streakStrikes;
 };
 
-export default function Home({ blogPosts, userStrikes, userStreaks, isUserStriked }: any) {
+export default function Home({ blogPosts, userStrikes, userStreaks }: any) {
   const session = useSession();
   const [formShown, setFormShown] = useState(false);
 
