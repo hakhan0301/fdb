@@ -1,6 +1,5 @@
 import { prisma } from '../index';
 import type { PostContent } from './types';
-import { tryIncrementStreaks } from './users';
 
 export async function getBlogs(userId: string | undefined | null = '') {
   const blogPost = await prisma.blogPost.findMany({
