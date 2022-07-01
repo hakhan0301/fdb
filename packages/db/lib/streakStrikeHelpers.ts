@@ -23,11 +23,6 @@ export function isYesterday(time: Date) {
   return time.getDate() === yesterday.getDate();
 }
 
-
-export function deservesStrike(lastPost: Date, lastStrike: Date): boolean {
-  return isBeforeYesterdayMorning(lastPost) && isBeforeToday(lastStrike);
-}
-
 export function timeWhenStrike(lastPost: Date, lastStrike: Date) {
   const postExpiration = new Date(lastPost);
   postExpiration.setHours(0, 0, 0, 0);
@@ -38,11 +33,15 @@ export function timeWhenStrike(lastPost: Date, lastStrike: Date) {
   strikeExpiration.setHours(0, 0, 0, 0);
   strikeExpiration.setDate(strikeExpiration.getDate() + 1);
 
-
-
   return (
     postExpiration.getTime() > strikeExpiration.getTime()
       ? postExpiration
       : strikeExpiration
   );
+}
+
+export function deservesStrike(lastPost: Date, lastStrike: Date): boolean {
+  const userStrikeTime = timeWhenStrike(lastPost, lastStrike);
+
+  return userStrikeTime.getTime() <= new Date().getTime();
 }
