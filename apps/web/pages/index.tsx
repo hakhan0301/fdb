@@ -6,7 +6,7 @@ import type { GetServerSideProps } from 'next';
 import { getSession, useSession } from 'next-auth/react';
 import NewPostField from "@fdb/ui/posts/NewPostField";
 import Post from "@fdb/ui/posts/Post";
-import { tryResetStreaks, tryStrikeUser } from "@fdb/db/models/users";
+import { tryStrikeFetchedUser, tryStrikeUser } from "@fdb/db/models/users";
 import StreakStrike from "@fdb/ui/posts/StreakStrike";
 import { User } from '@fdb/db/types';
 
@@ -25,15 +25,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
-  // next js funky wierdness
-  user.lastPost = new Date(user.lastPost as unknown as string);
-  user.lastStrike = new Date(user.lastStrike as unknown as string);
-
-  const isUserStriked = await tryStrikeUser({ ...user });
+  const isUserStriked = await tryStrikeFetchedUser(user.name);
   user.strikes += isUserStriked ? 1 : 0;
-
-  const isStreaksReset = await tryResetStreaks({ ...user });
-  user.streaks = isStreaksReset ? 1 : user.streaks;
+  user.streaks = isUserStriked ? 1 : user.streaks;
 
   // @ts-ignore
   if (user.strikes >= 3) {
@@ -49,7 +43,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     props: {
       blogPosts: await getBlogs(user.id),
       userStrikes: user.strikes,
-      userStreaks: user.streaks
+      userStreaks: user.streaks,
+      isUserStriked
     }
   }
 }
@@ -66,7 +61,7 @@ const getStreakStrikes = async () => {
   return streakStrikes;
 };
 
-export default function Home({ blogPosts, userStrikes, userStreaks }: any) {
+export default function Home({ blogPosts, userStrikes, userStreaks, isUserStriked }: any) {
   const session = useSession();
   const [formShown, setFormShown] = useState(false);
 

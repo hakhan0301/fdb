@@ -27,37 +27,34 @@ function deservesStrike(lastPost: Date, lastStrike: Date): boolean {
 }
 
 export async function tryStrikeUser({ name, lastPost, lastStrike }: User) {
-  if (deservesStrike(lastPost, lastStrike)) {
-    await prisma.user.update({
-      where: { name },
-      data: {
-        lastStrike: new Date(),
-        strikes: { increment: 1 },
-      }
-    });
-    return true;
-  }
-
-  return false;
-}
-
-
-export async function tryResetStreaks(
-  { name, lastPost }: { name: string, lastPost: Date }
-) {
-  if (!isBeforeYesterdayMorning(lastPost)) {
+  if (!deservesStrike(lastPost, lastStrike)) {
     return false;
   }
 
   await prisma.user.update({
     where: { name },
     data: {
-      lastPost: new Date(),
+      lastStrike: new Date(),
+      strikes: { increment: 1 },
       streaks: { set: 0 }
     }
   });
-
   return true;
+}
+
+export async function tryStrikeFetchedUser(name: string) {
+  let user = await prisma.user.findFirst({
+    where: { name }
+  });
+
+  if (!user) return null;
+
+  const striked = await tryStrikeUser({ ...user, name });
+  if (striked) {
+    user.strikes++;
+  }
+
+  return user;
 }
 
 
