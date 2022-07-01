@@ -7,24 +7,23 @@ import { User } from '@fdb/db/types';
 import { tryResetStreaks, tryStrikeUser } from '@fdb/db/models/users';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { method } = req;
+  try {
+    const { method } = req;
+    switch (method) {
+      case 'POST':
+        const session = await getSession({ req })
+        if (!session) return res.status(401).json('Not Authorized');
 
-  switch (method) {
-    case 'POST':
-      const session = await getSession({ req })
-      if (!session)
-        return res.status(401).json('Not Authorized');
-
-
-      try {
         return POST_blog(req, res, session);
-      } catch (e) {
-        console.error(e);
 
-        return res.status(500).json({ error: 'Internal Server Error.' });
-      }
-    default:
-      return res.status(404).json('Route not found.');
+      default:
+        return res.status(404).json('Route not found.');
+    }
+  } catch (e) {
+    // console.trace();
+    // console.error(e.stack);
+
+    return res.status(500).json({ error: 'Internal Server Error.' });
   }
 }
 
@@ -32,11 +31,14 @@ async function POST_blog(req: NextApiRequest, res: NextApiResponse, session: Ses
   const { body }: { body: any } = req;
   const user = session.user as User;
 
+  user.lastPost = new Date(user.lastPost);
+  user.lastStrike = new Date(user.lastStrike);
 
   await Promise.all([
+    await addBlog(JSON.parse(body), user.id!),
     await tryStrikeUser({ ...user }),
     await tryResetStreaks({ ...user }),
-    await addBlog(JSON.parse(body), user.id!),
-  ])
+  ]);
+
   return res.status(200).json({ error: false });
 }

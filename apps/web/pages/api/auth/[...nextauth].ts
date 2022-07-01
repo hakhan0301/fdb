@@ -43,7 +43,8 @@ export default NextAuth({
           image: user.image,
           streaks: user.streaks,
           strikes: user.strikes,
-          lastPost: user.lastPost
+          lastPost: user.lastPost,
+          lastStrike: user.lastStrike,
         };
       },
     }),

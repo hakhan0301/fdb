@@ -24,9 +24,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
   }
 
-  console.log(user);
-
-
   // next js funky wierdness
   user.lastPost = new Date(user.lastPost as unknown as string);
   user.lastStrike = new Date(user.lastStrike as unknown as string);
@@ -36,10 +33,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
   const isStreaksReset = await tryResetStreaks({ ...user });
   user.streaks = isStreaksReset ? 1 : user.streaks;
-
-  console.log(user);
-
-
 
   // @ts-ignore
   if (user.strikes >= 3) {
