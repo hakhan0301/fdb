@@ -1,30 +1,7 @@
 import { User } from "@prisma/client";
 import { prisma } from "..";
+import { deservesStrike, isYesterday } from "../lib/streakStrikeHelpers";
 
-function isBeforeYesterdayMorning(time: Date) {
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  yesterday.setHours(0, 0, 0, 0);
-  return time.getTime() < yesterday.getTime();
-}
-
-function isBeforeToday(time: Date) {
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  return time.getTime() < yesterday.getTime();
-}
-
-function isYesterday(time: Date) {
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-
-  return time.getDate() === yesterday.getDate();
-}
-
-function deservesStrike(lastPost: Date, lastStrike: Date): boolean {
-  if (!lastPost) return false;
-  return isBeforeYesterdayMorning(lastPost) && isBeforeToday(lastStrike);
-}
 
 export async function tryStrikeUser({ name, lastPost, lastStrike }: User) {
   if (!deservesStrike(lastPost, lastStrike)) {
