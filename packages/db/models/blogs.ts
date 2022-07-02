@@ -28,10 +28,20 @@ export type Post = {
   };
 }
 
-export async function getBlogs(userId: string | undefined | null = '')
-  : Promise<Post[]> {
+export async function getBlogs(
+  userId: string | undefined | null = '',
+  beforeDate?: string | Date
+): Promise<Post[]> {
+
+  const cursor = typeof beforeDate === 'string'
+    ? new Date(beforeDate)
+    : beforeDate;
+
   const blogPost = await prisma.blogPost.findMany({
     take: 10,
+    where: {
+      createdAt: { lt: cursor || new Date() }
+    },
     orderBy: {
       createdAt: 'desc'
     },

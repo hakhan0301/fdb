@@ -6,6 +6,7 @@ export interface AppContext {
   strikes: number,
   posts: Post[],
   addPost: (post: Post) => void,
+  addPosts: (posts: Post[]) => void,
   resetStreakStrikes: () => Promise<void>,
 }
 
@@ -14,6 +15,7 @@ const defaultApp: AppContext = {
   strikes: -1,
   posts: [],
   addPost: () => { },
+  addPosts: () => { },
   resetStreakStrikes: async () => { }
 }
 
