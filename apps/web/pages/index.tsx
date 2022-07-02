@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { getBlogs } from '@fdb/db/models/blogs';
 import { useEffect, useState } from 'react';
 import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
