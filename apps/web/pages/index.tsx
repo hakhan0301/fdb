@@ -27,8 +27,8 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   }
 
   const strikedUser = await tryStrikeFetchedUser(user.name);
-  user.strikes += strikedUser ? 1 : 0;
-  user.streaks = strikedUser ? 0 : user.streaks;
+  user.strikes += strikedUser ? strikedUser.strikes : 0;
+  user.streaks = strikedUser ? strikedUser.streaks : user.streaks;
 
   // @ts-ignore
   if (strikedUser && strikedUser.strikes >= 3) {
