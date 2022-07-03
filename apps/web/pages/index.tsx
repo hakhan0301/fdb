@@ -31,7 +31,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   user.streaks = strikedUser ? 0 : user.streaks;
 
   // @ts-ignore
-  if (strikedUser.strikes >= 3) {
+  if (strikedUser && strikedUser.strikes >= 3) {
     return {
       redirect: {
         destination: '/banned',
@@ -79,10 +79,13 @@ export default function Home({ blogPosts, userStrikes, userStreaks }: any) {
     posts: blogPosts,
     streaks: userStreaks,
     strikes: userStrikes,
-    addPost: (post) => setApp((prevApp) => ({
-      ...prevApp,
-      posts: [post, ...prevApp.posts]
-    })),
+    addPost: (post) => {
+      setApp((prevApp) => ({
+        ...prevApp,
+        posts: [post, ...prevApp.posts]
+      }));
+      setFormShown(false);
+    },
     addPosts: (posts) => setApp((prevApp) => ({
       ...prevApp,
       posts: [...prevApp.posts, ...posts]
