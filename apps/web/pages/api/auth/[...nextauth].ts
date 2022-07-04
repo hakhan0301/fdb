@@ -1,4 +1,4 @@
-import NextAuth from "next-auth";
+import NextAuth, { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 
 import { compare } from "bcrypt";
@@ -22,7 +22,7 @@ async function getUser(username: string, password: string) {
   return user;
 }
 
-export default NextAuth({
+export const options: NextAuthOptions = {
   providers: [
     Credentials({
       credentials: {
@@ -67,10 +67,12 @@ export default NextAuth({
   },
   session: {
     strategy: "jwt",
-
   },
   pages: {
     signIn: '/login',
-    error: '/'
-  }
-});
+    error: '/auth/error'
+  },
+  useSecureCookies: false
+};
+
+export default NextAuth(options);

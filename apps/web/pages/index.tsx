@@ -2,19 +2,22 @@ import { getBlogs } from '@fdb/db/models/blogs';
 import { useEffect, useState } from 'react';
 import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
 import type { GetServerSideProps } from 'next';
-import { getSession, useSession } from 'next-auth/react';
+import { unstable_getServerSession } from 'next-auth/next';
+import { useSession } from 'next-auth/react';
 import NewPostField from "@fdb/ui/posts/NewPostField";
 import Post from "@fdb/ui/posts/Post";
 import { tryStrikeFetchedUser } from "@fdb/db/models/users";
 import StreakStrike from "@fdb/ui/posts/StreakStrike";
 import { User } from '@fdb/db/types';
 
+import { options } from './api/auth/[...nextauth]';
+
 import appContext, { AppContext } from '@fdb/ui/contexts/appContext';
 import Button from '@fdb/ui/common/Button';
 import { Post as PostType } from "@fdb/db/models/blogs";
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await getSession(context);
+  const session = await unstable_getServerSession(context.req, context.res, options);
   const user = session?.user as User;
 
   if (!user) {
