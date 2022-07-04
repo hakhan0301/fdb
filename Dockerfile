@@ -2,23 +2,24 @@ FROM node:17
 
 WORKDIR /usr/src/app
 
-COPY package.json package.json
-COPY package-lock.json package-lock.json
+COPY . .
+RUN find -not -type d -not -name "package*.json"  | xargs rm -f
+RUN find . -empty -type d -delete
 
-COPY packages/ packages/
-COPY apps/web/package.json apps/web/package.json
+# ----------- build stage 2
+FROM node:17
 
-RUN npm i 
-
-WORKDIR /usr/src/app/packages/db
-RUN npx prisma db push
+EXPOSE 3000
+CMD [ "npm", "start" ]
 
 WORKDIR /usr/src/app
-COPY . .
+COPY --from=0 /usr/src/app .
+
 RUN npm i 
 
-WORKDIR /usr/src/app/apps/web
+COPY . .
+
 RUN npm run build
 
-CMD [ "npm", "start" ]
-EXPOSE 3000
+WORKDIR /usr/src/app/apps/web
+
