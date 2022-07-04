@@ -8,11 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     switch (method) {
       case 'GET':
-        const session = await getSession({ req })
-        if (!session)
-          return res.status(401).json('Not Authorized');
-
-        return GET_vapidPublic(req, res, session);
+        return GET_vapidPublic(req, res);
       default:
         return res.status(404).json('METHOD not found.');
     }
@@ -23,6 +19,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 }
 
-async function GET_vapidPublic(req: NextApiRequest, res: NextApiResponse, session: Session) {
+async function GET_vapidPublic(req: NextApiRequest, res: NextApiResponse) {
   return res.status(200).send(process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY);
 }
