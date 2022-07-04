@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.ts",
   "scripts": {
+    "build": "prisma db push",
     "lint": "eslint *.ts*",
     "test": "jest",
     "test:watch": "jest --watch"
