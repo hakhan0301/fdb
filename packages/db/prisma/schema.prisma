@@ -3,15 +3,15 @@ generator client {
 }
 
 datasource db {
-  provider = "cockroachdb"
-  url      = env("DATABASE_URL")
+  // provider = "cockroachdb"
+  // url      = env("DATABASE_URL")
 
-  // provider = "sqlite"
-  // url      = "file:../../../data/dev.db"
+  provider = "sqlite"
+  url      = "file:../../../data/dev.db"
 }
 
 model BlogPost {
-  id        Int      @id @default(sequence())
+  id        Int      @id @default(autoincrement())
   type      String   @default("text")
   text      String
   createdAt DateTime @default(now())
@@ -55,7 +55,7 @@ model Subscription {
 }
 
 model Comment {
-  id        Int      @id @default(sequence())
+  id        Int      @id @default(autoincrement())
   text      String
   createdAt DateTime @default(now())
 
