@@ -1,7 +1,5 @@
 import TextField from "@fdb/ui/common/TextField";
 import Button from "@fdb/ui/common/Button";
-import { BsGoogle, BsDiscord } from "react-icons/bs";
-import { useSession, signIn, signOut } from "next-auth/react";
 import { useState } from "react";
 
 const isValidString = (str: string) => str.length >= 3 && str.length < 100;
@@ -12,6 +10,20 @@ export default function LoginPage() {
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+
+  const signIn = async (username: string, password: string, { callbackUrl }: { callbackUrl?: string }) => {
+    if (!isValidString(username)) return;
+    if (!isValidString(password)) return;
+
+    setUsername("");
+    setPassword("");
+    await fetch('/api/auth/signIn', {
+      body: JSON.stringify({ username, password }),
+      method: 'POST'
+    }).then(res => res.json());
+
+
+  };
 
   const signUp = async (username: string, password: string) => {
     if (!isValidString(username)) return;
@@ -24,7 +36,7 @@ export default function LoginPage() {
       method: 'POST'
     });
 
-    signIn('credentials', { username, password, callbackUrl: '/user/pfp' });
+    signIn(username, password, { callbackUrl: '/user/pfp' });
   };
 
   return (
@@ -52,7 +64,7 @@ export default function LoginPage() {
                 />
               </div>
               <div className="flex justify-end">
-                <Button onPress={() => signIn('credentials', { username, password, callbackUrl: '/' })}>Submit</Button>
+                <Button onPress={() => signIn(username, password, { callbackUrl: '/' })}>Submit</Button>
                 {/* <Button onPress={() => setLoginSpin(!loginSpin)}>Submit</Button> */}
               </div>
             </div>

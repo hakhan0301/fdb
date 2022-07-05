@@ -1,56 +1,54 @@
 import { getBlogs } from '@fdb/db/models/blogs';
 import { useEffect, useState } from 'react';
 import { BsChevronDown, BsChevronUp } from 'react-icons/bs';
-import type { GetServerSideProps } from 'next';
-import { unstable_getServerSession } from 'next-auth/next';
-import { useSession } from 'next-auth/react';
 import NewPostField from "@fdb/ui/posts/NewPostField";
 import Post from "@fdb/ui/posts/Post";
 import { tryStrikeFetchedUser } from "@fdb/db/models/users";
 import StreakStrike from "@fdb/ui/posts/StreakStrike";
-import { User } from '@fdb/db/types';
-
-import { options } from './api/auth/[...nextauth]';
 
 import appContext, { AppContext } from '@fdb/ui/contexts/appContext';
 import Button from '@fdb/ui/common/Button';
 import { Post as PostType } from "@fdb/db/models/blogs";
+import { withSessionSsr } from '../lib/withAuth';
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const session = await unstable_getServerSession(context.req, context.res, options);
-  const user = session?.user as User;
-
-  if (!user) {
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
+export const getServerSideProps = withSessionSsr(
+  async function getServerSideProps({ req }) {
+    const user = req.session.user;
+    if (!user) {
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: false,
+        }
       }
     }
-  }
 
-  const strikedUser = await tryStrikeFetchedUser(user.name);
-  user.strikes += strikedUser ? strikedUser.strikes : 0;
-  user.streaks = strikedUser ? strikedUser.streaks : user.streaks;
+    const strikedUser = await tryStrikeFetchedUser(user.name);
+    user.strikes += strikedUser ? strikedUser.strikes : 0;
+    user.streaks = strikedUser ? strikedUser.streaks : user.streaks;
 
-  // @ts-ignore
-  if (strikedUser && strikedUser.strikes >= 3) {
+    // @ts-ignore
+    if (strikedUser && strikedUser.strikes >= 3) {
+      return {
+        redirect: {
+          destination: '/banned',
+          permanent: false,
+        },
+      }
+    }
+
     return {
-      redirect: {
-        destination: '/banned',
-        permanent: false,
-      },
-    }
+      props: {
+        blogPosts: await getBlogs(user.id),
+        user: {
+          ...strikedUser,
+          lastPost: strikedUser?.lastPost.toString(),
+          lastStrike: strikedUser?.lastStrike.toString(),
+        }
+      }
+    };
   }
-
-  return {
-    props: {
-      blogPosts: await getBlogs(user.id),
-      userStrikes: user.strikes,
-      userStreaks: user.streaks
-    }
-  }
-}
+);
 
 type StreaksStrikes = {
   streaks: number,
@@ -73,15 +71,14 @@ const getPosts = async (lastPostDate?: string) => {
 
 const POSTS_PER_PAGE = 10;
 
-export default function Home({ blogPosts, userStrikes, userStreaks }: any) {
-  const session = useSession();
+export default function Home({ blogPosts, user }: any) {
   const [formShown, setFormShown] = useState(false);
   const [page, setPage] = useState(0);
 
   const [app, setApp] = useState<AppContext>({
     posts: blogPosts,
-    streaks: userStreaks,
-    strikes: userStrikes,
+    streaks: user.streaks,
+    strikes: user.strikes,
     addPost: (post) => {
       setApp((prevApp) => ({
         ...prevApp,
@@ -148,7 +145,7 @@ export default function Home({ blogPosts, userStrikes, userStreaks }: any) {
             {app.posts
               .slice(page * POSTS_PER_PAGE, page * POSTS_PER_PAGE + POSTS_PER_PAGE)
               .map((blogPost: any, index: number) =>
-                <Post key={JSON.stringify(blogPost)} index={index} sessionUser={session?.data?.user}
+                <Post key={JSON.stringify(blogPost)} index={index} sessionUser={user}
                   {...blogPost}
                 />
               )
