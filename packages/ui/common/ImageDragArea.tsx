@@ -42,7 +42,7 @@ export default function ImageDragArea({ onChange = null }: Props = {}) {
 
   return (
     <div className="w-full">
-      <BrowserView>
+      {/* <BrowserView>
         {imagePreview
 
           ? (<div className={`flex flex-col p-2 gap-1 items-end w-[100%] bg-pink-100 border border-pink-300 shadow-lg`}>
@@ -71,14 +71,14 @@ export default function ImageDragArea({ onChange = null }: Props = {}) {
             </div>
           </div>)
         }
-      </BrowserView>
+      </BrowserView> */}
 
-      <MobileView>
+      <>
         <div>
           <input type="file" accept="image/*"
             onChange={(e) => setImageFile(e.target.files && e.target.files[0])} />
         </div>
-      </MobileView>
+      </>
     </div>
   );
 }
