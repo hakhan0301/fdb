@@ -153,7 +153,7 @@ export default function Home({ blogPosts, user }: any) {
           </div>
 
           {/* pagination button */}
-          <div className='flex bg-black justify-between px-3 py-5'>
+          <div className='flex bg-pink-50 justify-between px-3 py-5'>
             <Button isDisabled={page == 0} onPress={onPrevPage}>
               Prev
             </Button>
@@ -164,8 +164,8 @@ export default function Home({ blogPosts, user }: any) {
 
 
           {/* footer */}
-          <div className='flex justify-center align-center px-4 py-4 bg-purple-300'>
-            <div className='text-lg font-bold'>Foolar DB</div>
+          <div className='flex justify-center align-center px-4 py-4 bg-black'>
+            <div className='text-lg font-bold text-white'>Foolar DB</div>
           </div>
 
         </div>
