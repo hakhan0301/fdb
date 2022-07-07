@@ -1,19 +1,21 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '@fdb/db';
-import { getSession } from 'next-auth/react';
-import type { Session } from 'next-auth';
+import { sessionOptions } from '../../../lib/session';
+import { withIronSessionApiRoute } from 'iron-session/next';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default withIronSessionApiRoute(handler, sessionOptions);
+
+
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
 
   try {
     switch (method) {
       case 'POST':
-        const session = await getSession({ req })
-        if (!session)
+        if (!req.session.user)
           return res.status(401).json('Not Authorized');
 
-        return POST_generateImageUrl(req, res, session);
+        return POST_generateImageUrl(req, res);
       default:
         return res.status(404).json('METHOD not found.');
     }
@@ -24,12 +26,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 }
 
-async function POST_generateImageUrl(req: NextApiRequest, res: NextApiResponse, session: Session) {
+async function POST_generateImageUrl(req: NextApiRequest, res: NextApiResponse) {
   const { url } = JSON.parse(req.body);
-  const { id } = session.user as any;
-
-  console.log(url);
-
+  const { id } = req.session.user!;
 
   await prisma.user.update({
     where: { id },

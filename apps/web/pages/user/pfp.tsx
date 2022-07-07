@@ -3,11 +3,13 @@ import Button from "@fdb/ui/common/Button";
 import { useState } from "react";
 import { useRouter } from "next/router";
 import { subscribe } from "@fdb/notifications";
-import { useSession } from "next-auth/react";
+import withAuth from "../../lib/withAuth";
+import { User } from "../api/auth/signIn";
 
-export default function PFP() {
+export const getServerSideProps = withAuth;
+
+export default function PFP({ user }: { user: User }) {
   const router = useRouter();
-  const session = useSession();
 
   const [submitting, setSubmitting] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
@@ -33,7 +35,7 @@ export default function PFP() {
 
 
     // @ts-ignore
-    subscribe(session?.data?.user?.id);
+    subscribe(user.id);
 
     setImageFile(null);
     setSubmitting(false);
@@ -59,9 +61,6 @@ export default function PFP() {
           <div className="flex justify-end">
             <Button onPress={submitImage} isDisabled={submitting}>Post</Button>
           </div>
-
-
-
         </div>
       </div>
     </div >

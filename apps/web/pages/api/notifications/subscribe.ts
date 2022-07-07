@@ -1,20 +1,19 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '@fdb/db';
-import { getSession } from 'next-auth/react';
-import type { Session } from 'next-auth';
 import type { PushSubscription } from 'web-push';
+import { sessionOptions } from '../../../lib/session';
+import { withIronSessionApiRoute } from 'iron-session/next';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { method } = req;
+export default withIronSessionApiRoute(handler, sessionOptions);
+
+async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (!req.session.user)
+    return res.status(401).json('Not Authorized');
 
   try {
-    switch (method) {
+    switch (req.method) {
       case 'POST':
-        const session = await getSession({ req })
-        if (!session)
-          return res.status(401).json('Not Authorized');
-
-        return POST_subscribe(req, res, session);
+        return POST_subscribe(req, res);
       default:
         return res.status(404).json('METHOD not found.');
     }
@@ -25,9 +24,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 }
 
-async function POST_subscribe(req: NextApiRequest, res: NextApiResponse, session: Session) {
+async function POST_subscribe(req: NextApiRequest, res: NextApiResponse) {
   const { subscription }: { subscription: PushSubscription } = JSON.parse(req.body);
-  const { id } = session.user as any;
+  const { id } = req.session.user!;
 
   await prisma.subscription.upsert({
     where: { userId: id },
