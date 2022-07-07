@@ -1,28 +1,27 @@
-import { addComment, dislikeBlog } from '@fdb/db/models/blogs';
-import { getSession } from "next-auth/react";
-
+import { addComment } from '@fdb/db/models/blogs';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import type { Session } from 'next-auth';
+import { sessionOptions } from '../../../../lib/session';
+import { withIronSessionApiRoute } from 'iron-session/next';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default withIronSessionApiRoute(handler, sessionOptions);
+
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
 
   switch (method) {
     case 'POST':
-      const session = await getSession({ req });
-      if (!session) return res.status(401).json('Not Authorized');
+      if (!req.session.user) return res.status(401).json('Not Authorized');
 
-      return POST_blog_comment(req, res, session);
+      return POST_blog_comment(req, res);
     default:
       return res.status(404).json('Route not found.');
   }
 }
 
-async function POST_blog_comment(req: NextApiRequest, res: NextApiResponse, session: Session) {
+async function POST_blog_comment(req: NextApiRequest, res: NextApiResponse) {
   const comment = req.body;
   const blogId = parseInt(req.query.blogId as string, 10);
-  // @ts-ignore
-  const id = session.user?.id as string;
+  const id = req.session.user!.id;
 
   try {
     await addComment(comment, blogId, id);
