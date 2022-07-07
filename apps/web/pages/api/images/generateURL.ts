@@ -2,6 +2,8 @@ import { v4 as uuidv4 } from 'uuid';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import S3 from 'aws-sdk/clients/s3';
+import { withIronSessionApiRoute } from 'iron-session/next';
+import { sessionOptions } from '../../../lib/session';
 
 const s3 = new S3({
   region: process.env.IMAGE_BUCKET_REGION,
@@ -16,7 +18,9 @@ async function generateS3Url(): Promise<string> {
   });
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default withIronSessionApiRoute(handler, sessionOptions);
+
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
 
   try {
