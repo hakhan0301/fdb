@@ -16,7 +16,7 @@ async function getUser(username: string, password: string) {
   const passwordsMatch = await compare(password as string, user?.password);
   if (!passwordsMatch) return null;
 
-  const striked = await tryStrikeUser({ ...user });
+  const striked = await tryStrikeUser(user.name, user.lastPost, user.lastStrike);
   if (striked)
     user.strikes++;
 
