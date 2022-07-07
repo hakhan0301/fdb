@@ -1,0 +1,1 @@
+self.__WB_DISABLE_DEV_LOGS=!0,console.log("Hello from Service Worker!"),self.addEventListener("push",(o=>{const e=(null==o?void 0:o.data.text())||"NOTIFICATION";null==o||o.waitUntil(self.registration.showNotification("FDB - Foolar DB",{body:e,icon:"/icons/android-chrome-192x192.png"}))}));

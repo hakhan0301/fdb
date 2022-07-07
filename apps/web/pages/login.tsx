@@ -1,10 +1,13 @@
 import TextField from "@fdb/ui/common/TextField";
 import Button from "@fdb/ui/common/Button";
 import { useState } from "react";
+import { useRouter } from "next/router";
 
 const isValidString = (str: string) => str.length >= 3 && str.length < 100;
 
 export default function LoginPage() {
+  const router = useRouter();
+
   const [loginSpin, setLoginSpin] = useState(false);
   const [signupSpin, setSignupSpin] = useState(false);
 
@@ -22,7 +25,7 @@ export default function LoginPage() {
       method: 'POST'
     }).then(res => res.json());
 
-
+    router.push(callbackUrl || '/');
   };
 
   const signUp = async (username: string, password: string) => {
