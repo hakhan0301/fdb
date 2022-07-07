@@ -14,7 +14,7 @@ import { withSessionSsr } from '../lib/withAuth';
 export const getServerSideProps = withSessionSsr(
   async function getServerSideProps({ req }) {
     const user = req.session.user;
-    if (!user) {
+    if (!user?.id) {
       return {
         redirect: {
           destination: '/login',
