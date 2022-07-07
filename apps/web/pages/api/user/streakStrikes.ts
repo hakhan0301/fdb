@@ -1,19 +1,21 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '@fdb/db';
-import { getSession } from 'next-auth/react';
-import type { Session } from 'next-auth';
+import { withIronSessionApiRoute } from "iron-session/next";
+import { sessionOptions } from '../../../lib/session';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default withIronSessionApiRoute(handler, sessionOptions);
+
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
+
+  const user = req.session.user;
+  if (!user)
+    return res.status(401).json('Not Authorized');
 
   try {
     switch (method) {
       case 'GET':
-        const session = await getSession({ req })
-        if (!session)
-          return res.status(401).json('Not Authorized');
-
-        return GET_streakStrike(req, res, session);
+        return GET_streakStrike(req, res);
       default:
         return res.status(404).json('METHOD not found.');
     }
@@ -24,8 +26,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 }
 
-async function GET_streakStrike(req: NextApiRequest, res: NextApiResponse, session: Session) {
-  const { id } = session.user as any;
+async function GET_streakStrike(req: NextApiRequest, res: NextApiResponse) {
+  const { id } = req.session.user!;
 
   const user = await prisma.user.findFirst({
     where: { id },
