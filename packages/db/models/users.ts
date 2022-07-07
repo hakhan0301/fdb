@@ -1,9 +1,8 @@
-import { User } from "@prisma/client";
 import { prisma } from "..";
 import { deservesStrike, isYesterday } from "../lib/streakStrikeHelpers";
 
 
-export async function tryStrikeUser({ name, lastPost, lastStrike }: User) {
+export async function tryStrikeUser(name: string, lastPost: Date, lastStrike: Date) {
   if (!deservesStrike(lastPost, lastStrike)) {
     return false;
   }
@@ -26,7 +25,7 @@ export async function tryStrikeFetchedUser(name: string) {
 
   if (!user) return null;
 
-  const striked = await tryStrikeUser({ ...user, name });
+  const striked = await tryStrikeUser(name, user.lastPost, user.lastStrike);
   if (striked) {
     user.strikes++;
   }

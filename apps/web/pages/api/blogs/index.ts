@@ -1,21 +1,20 @@
 import { addBlog, getBlogs } from '@fdb/db/models/blogs';
-import { getSession } from "next-auth/react";
-
 import type { NextApiRequest, NextApiResponse } from 'next';
-import type { Session } from 'next-auth';
-import { User } from '@fdb/db/types';
 import { tryIncrementStreaks, tryStrikeUser } from '@fdb/db/models/users';
+import { withIronSessionApiRoute } from 'iron-session/next';
+import { sessionOptions } from '../../../lib/session';
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default withIronSessionApiRoute(handler, sessionOptions);
+
+async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { method } = req;
-    const session = await getSession({ req })
-    if (!session) return res.status(401).json('Not Authorized');
+    if (!req.session.user) return res.status(401).json('Not Authorized');
     switch (method) {
       case 'POST':
-        return POST_blog(req, res, session);
+        return POST_blog(req, res);
       case 'GET':
-        return GET_blog(req, res, session);
+        return GET_blog(req, res);
       default:
         return res.status(404).json('Route not found.');
     }
@@ -26,14 +25,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 }
 
-async function POST_blog(req: NextApiRequest, res: NextApiResponse, session: Session) {
+async function POST_blog(req: NextApiRequest, res: NextApiResponse) {
   const { body }: { body: any } = req;
-  const user = session.user as User;
+  const user = req.session.user!;
 
   user.lastPost = new Date(user.lastPost);
   user.lastStrike = new Date(user.lastStrike);
 
-  await tryStrikeUser({ ...user });
+  await tryStrikeUser(user.name, user.lastPost, user.lastStrike);
 
   const [newPost] = await Promise.all([
     await addBlog(JSON.parse(body), user.id!),
@@ -45,9 +44,8 @@ async function POST_blog(req: NextApiRequest, res: NextApiResponse, session: Ses
 
 
 
-async function GET_blog(req: NextApiRequest, res: NextApiResponse, session: Session) {
-  const user = session.user as User;
-
+async function GET_blog(req: NextApiRequest, res: NextApiResponse) {
+  const user = req.session.user!;
 
   if (user.strikes >= 3) {
     return res.status(400).send('Banned');
