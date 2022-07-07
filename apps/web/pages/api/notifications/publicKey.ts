@@ -1,7 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { prisma } from '@fdb/db';
-import { getSession } from 'next-auth/react';
-import type { Session } from 'next-auth';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
