@@ -10,6 +10,8 @@ const headContent = [
   <meta name='description' content='FOOLAR DB' key={Math.random()} />,
   <link rel='icon' type='image/png' sizes='32x32' href='/icons/favicon-32x32.png' key={Math.random()} />,
   <link rel='icon' type='image/png' sizes='16x16' href='/icons/favicon-16x16.png' key={Math.random()} />,
+  <link rel='manifest' href='/manifest.json' key={Math.random()} />,
+
 ];
 
 function MyApp({
