@@ -36,7 +36,6 @@ export type User = {
 export default withIronSessionApiRoute(
   async function loginRoute(req, res) {
     const { username, password } = JSON.parse(req.body);
-    console.log(username, password);
 
     if (!username || !password) {
       throw new Error('invalid username or password');
