@@ -8,7 +8,7 @@ import { sessionOptions } from '../../../lib/session';
 const s3 = new S3({
   region: process.env.IMAGE_BUCKET_REGION,
   accessKeyId: process.env.AWS_ACCESS_KEY,
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  secretAccessKey: process.env.AWS_SECRET,
 });
 
 async function generateS3Url(): Promise<string> {
