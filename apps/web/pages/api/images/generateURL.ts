@@ -7,7 +7,7 @@ import { sessionOptions } from '../../../lib/session';
 
 const s3 = new S3({
   region: process.env.IMAGE_BUCKET_REGION,
-  accessKeyId: process.env.AWS_ACCESS_KEY,
+  accessKeyId: process.env.AWS_ACCESS,
   secretAccessKey: process.env.AWS_SECRET,
 });
 
