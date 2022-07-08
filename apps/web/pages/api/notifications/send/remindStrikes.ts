@@ -35,6 +35,7 @@ async function GET_almostStriked(req: NextApiRequest, res: NextApiResponse) {
       subscription: { isNot: null }
     },
     select: {
+      name: true,
       subscription: true,
       lastPost: true,
       lastStrike: true
@@ -58,7 +59,11 @@ async function GET_almostStriked(req: NextApiRequest, res: NextApiResponse) {
     return sendNotification(user.subscription!, message);
   });
 
-  await Promise.all(promises);
+  const notificationResults = await Promise.all(promises);
 
-  return res.status(200).json('Success.');
+  const userNotificationResults = notificationResults.map((notRes, i) => ({
+    [users[i].name]: notRes.statusCode
+  }));
+
+  return res.status(200).json(userNotificationResults);
 }
