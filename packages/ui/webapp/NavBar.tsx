@@ -1,18 +1,22 @@
 import { useState } from "react";
 import { FaBell } from "react-icons/fa";
-import { GiSettingsKnobs, GiChalkOutlineMurder } from "react-icons/gi";
+import { GiSettingsKnobs, GiChalkOutlineMurder, GiHamburgerMenu } from "react-icons/gi";
 import Link from 'next/link';
+import { useRouter } from "next/router";
 
 
 import { subscribe } from '@fdb/notifications';
 
 export default function NavBar() {
   const [menuHidden, setMenuHidden] = useState(true);
+  const router = useRouter();
 
   const toggleMenu = () => setMenuHidden(!menuHidden);
-  // const session = useSession();
 
-  // useRedirect({ session });
+  const signOut = async () => {
+    await fetch('/api/auth/signOut');
+    router.push('/login');
+  }
 
   return (
     <div>
@@ -23,11 +27,8 @@ export default function NavBar() {
 
           <div className="flex flex-row gap-3 items-center">
             <Link href="/test"><div className="text-sm cursor-pointer">dev</div></Link>
+            <div className="cursor-pointer select-none" onClick={toggleMenu}><GiHamburgerMenu /></div>
 
-            {/* {session.data?.user
-              ? <div className="cursor-pointer select-none" onClick={toggleMenu}><GiHamburgerMenu /></div>
-              : <></>
-            } */}
           </div>
         </div>
       </div>
@@ -46,10 +47,10 @@ export default function NavBar() {
               </div>
             </Link>
             {/* @ts-ignore */}
-            <div onClick={() => { subscribe(session?.data?.user?.id); toggleMenu(); }} className="flex gap-2 items-center select-none cursor-pointer pl-3 pr-3 py-2 bg-purple-600">
+            <div onClick={() => { subscribe(); toggleMenu(); }} className="flex gap-2 items-center select-none cursor-pointer pl-3 pr-3 py-2 bg-purple-600">
               <FaBell /> Enable Notifications
             </div>
-            <div onClick={() => { toggleMenu(); }} className="flex gap-2 items-center select-none cursor-pointer pl-3 pr-3 py-2 bg-purple-600">
+            <div onClick={() => { signOut(); toggleMenu(); }} className="flex gap-2 items-center select-none cursor-pointer pl-3 pr-3 py-2 bg-purple-600">
               <GiChalkOutlineMurder /> Sign Out
             </div>
           </div>
